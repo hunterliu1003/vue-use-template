@@ -1,5 +1,12 @@
 
 
+# [0.0.0-beta.1](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.0...0.0.0-beta.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* types path ([517a357](https://github.com/hunterliu1003/vue-use-template/commit/517a35745a768e38ca2c596e84d98859db89a6d2))
+
 # 0.0.0-beta.0 (2024-02-14)
 
 

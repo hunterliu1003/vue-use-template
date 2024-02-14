@@ -1,5 +1,7 @@
 
 
+# [0.0.0-beta.4](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.3...0.0.0-beta.4) (2024-02-14)
+
 # [0.0.0-beta.3](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.2...0.0.0-beta.3) (2024-02-14)
 
 # [0.0.0-beta.2](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.1...0.0.0-beta.2) (2024-02-14)

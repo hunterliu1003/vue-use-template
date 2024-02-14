@@ -20,7 +20,7 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       name,
-      fileName: format => `${name}.${format}.${format === 'es' ? 'm' : ''}js`,
+      fileName: format => `${name}.${format === 'es' ? 'm' : 'c'}js`,
     },
     rollupOptions: {
       external: [

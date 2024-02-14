@@ -2,12 +2,37 @@
   "name": "vue-use-template",
   "type": "module",
   "version": "0.0.0",
-  "private": true,
+  "keywords": [],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite build -w",
     "build": "vue-tsc && vite build",
     "lint": "eslint . --fix",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "release": "pnpm build && pnpm cypress:run && release-it",
+    "cypress:open": "cypress open --browser electron --component",
+    "cypress:run": "cypress run --browser electron --component"
   },
   "peerDependencies": {
     "@vueuse/core": "^10.7.2",
@@ -16,16 +41,18 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.4",
+    "@release-it/conventional-changelog": "^8.0.1",
     "@types/node": "^20.11.17",
     "@vitejs/plugin-vue": "^5.0.3",
     "@vueuse/core": "^10.7.2",
+    "cypress": "^13.6.4",
     "eslint": "npm:eslint-ts-patch@8.56.0-0",
     "eslint-ts-patch": "8.56.0-0",
     "lint-staged": "^15.2.2",
     "pnpm": "^8.15.2",
     "simple-git-hooks": "^2.9.0",
     "typescript": "^5.2.2",
-    "vite": "^5.1.0",
+    "vite": "^4.5.2",
     "vite-plugin-dts": "^3.7.2",
     "vue": "^3.4.15",
     "vue-component-type-helpers": "^1.8.27",

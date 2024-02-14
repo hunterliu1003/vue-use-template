@@ -9,7 +9,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "vue-use-template": "0.0.0-beta.4"
+    "vue-use-template": "0.0.0-beta.5"
   },
   "devDependencies": {
     "@nuxt-themes/docus": "^1.15.0",

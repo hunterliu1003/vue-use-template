@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint --fix",
+    "lint": "eslint . --fix",
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
@@ -28,6 +28,6 @@
     "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
-    "*": "eslint --fix"
+    "*": "eslint . --fix"
   }
 }

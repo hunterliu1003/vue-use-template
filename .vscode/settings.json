@@ -8,7 +8,7 @@
   "editor.codeActionsOnSave": {
 
     "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
+    "source.organizeImports": "never"
 
   },
   // Silent the stylistic rules in you IDE, but still auto fix them

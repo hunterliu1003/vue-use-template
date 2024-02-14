@@ -4,24 +4,31 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite build -w",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview",
     "lint": "eslint . --fix",
     "typecheck": "vue-tsc --noEmit"
   },
-  "dependencies": {
-    "vue": "^3.4.15"
+  "peerDependencies": {
+    "@vueuse/core": "^10.7.2",
+    "vue": ">=3.0.0",
+    "vue-component-type-helpers": ">=1.8.27"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.4",
+    "@types/node": "^20.11.17",
     "@vitejs/plugin-vue": "^5.0.3",
+    "@vueuse/core": "^10.7.2",
     "eslint": "npm:eslint-ts-patch@8.56.0-0",
     "eslint-ts-patch": "8.56.0-0",
     "lint-staged": "^15.2.2",
+    "pnpm": "^8.15.2",
     "simple-git-hooks": "^2.9.0",
     "typescript": "^5.2.2",
     "vite": "^5.1.0",
+    "vite-plugin-dts": "^3.7.2",
+    "vue": "^3.4.15",
+    "vue-component-type-helpers": "^1.8.27",
     "vue-tsc": "^1.8.27"
   },
   "simple-git-hooks": {

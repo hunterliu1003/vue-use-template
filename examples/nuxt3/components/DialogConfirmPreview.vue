@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineTemplate, useTemplate } from 'vue-use-template'
 import { defineAsyncComponent, h } from 'vue'
+import { defineTemplate, useTemplate } from 'vue-use-template'
 
 const { show, hide } = useTemplate({
   component: defineAsyncComponent(() => import('./DialogConfirm.vue')),
@@ -19,6 +19,7 @@ const { show, hide } = useTemplate({
     }),
   },
 })
+show()
 </script>
 
 <template>

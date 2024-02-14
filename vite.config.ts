@@ -14,6 +14,7 @@ export default defineConfig({
     vue(),
     dts({
       include: 'src',
+      rollupTypes: true,
     }),
   ],
   build: {

@@ -5,6 +5,8 @@ import type { ComponentSlots } from 'vue-component-type-helpers'
 import type { CreateContainer, Template, UseTemplate } from './types'
 import { isString, objectEntries } from './utils'
 
+export * from './types'
+
 export function createContainer(options?: { name?: string }): CreateContainer {
   const vNodes: VNode[] = shallowReactive([])
   const containers = ref<symbol[]>([])

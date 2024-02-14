@@ -32,7 +32,7 @@
     "typecheck": "vue-tsc --noEmit",
     "release": "pnpm build && pnpm cypress:run && release-it",
     "cypress:open": "cypress open --browser electron --component",
-    "cypress:run": "cypress run --browser electron --component"
+    "cypress:run": "cypress run --component"
   },
   "peerDependencies": {
     "@vueuse/core": "^10.7.2",

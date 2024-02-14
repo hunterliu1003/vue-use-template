@@ -1,29 +1,13 @@
 import { defineAsyncComponent, h } from 'vue'
-import { Container, createContainer, defineTemplate, useTemplate } from '../../src/index'
+import { Container, createTemplatePlugin, defineTemplate, useTemplate } from '../../src/index'
 
 describe('test useTemplate()', () => {
-  it('hello world - useTemplate and Container', () => {
-    cy.mount(Container as any).as('container')
+  it('hello world - createTemplatePlugin', () => {
+    const templatePlugin = createTemplatePlugin()
+    cy.mount(Container as any, { global: { plugins: [templatePlugin] } }).as('container')
 
     const text = 'Hello World!'
-    const { show, hide } = useTemplate({
-      component: () => h('div', text),
-    })
-
-    cy.get('@container').then(() => show())
-    cy.contains(text).should('exist')
-
-    cy.get('@container').then(() => hide())
-    cy.contains(text).should('not.exist')
-  })
-  it('hello world - createContainer', () => {
-    const { Container: _Container, useTemplate: _useTemplate } = createContainer()
-    cy.mount(_Container as any).as('container')
-
-    const text = 'Hello World!'
-    const { show, hide } = _useTemplate({
-      component: () => h('div', text),
-    })
+    const { show, hide } = useTemplate({ component: () => h('div', text) })
 
     cy.get('@container').then(() => show())
     cy.contains(text).should('exist')
@@ -33,15 +17,15 @@ describe('test useTemplate()', () => {
   })
 
   it('DialogConfirm', () => {
-    const { Container: _Container, useTemplate: _useTemplate } = createContainer()
-    cy.mount(_Container as any).as('container')
+    const templatePlugin = createTemplatePlugin()
+    cy.mount(Container as any, { global: { plugins: [templatePlugin] } }).as('container')
 
     const title = 'Hello World!'
     const content = 'This is a dialog content.'
     const onConfirm = cy.spy().as('onConfirm')
     const onCancel = cy.spy().as('onCancel')
 
-    const { show, hide } = _useTemplate({
+    const { show, hide } = useTemplate({
       component: defineAsyncComponent(() => import('./DialogConfirm.vue')),
       attrs: {
         title,
@@ -55,9 +39,7 @@ describe('test useTemplate()', () => {
         },
       },
       slots: {
-        default: defineTemplate({
-          component: () => h('p', content),
-        }),
+        default: defineTemplate({ component: () => h('p', content) }),
       },
     })
 

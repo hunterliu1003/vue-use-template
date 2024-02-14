@@ -1,4 +1,4 @@
-import type { Component } from 'vue'
+import type { App, Component, Ref, VNode } from 'vue'
 import type { ComponentProps, ComponentSlots } from 'vue-component-type-helpers'
 
 export interface Template<T extends Component> {
@@ -9,9 +9,10 @@ export interface Template<T extends Component> {
   }
 }
 
-export interface CreateContainer {
-  Container: Component
-  useTemplate: UseTemplate
+export interface TemplatePlugin {
+  install: (app: App) => void
+  vNodeFns: (() => VNode)[]
+  containers: Ref<symbol[]>
 }
 
 export type UseTemplate = <T extends Component>(

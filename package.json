@@ -2,6 +2,16 @@
   "name": "vue-use-template",
   "type": "module",
   "version": "0.0.0-beta.3",
+  "packageManager": "pnpm@8.15.2",
+  "description": "vue use template",
+  "author": "Hunter Liu <hunterliu1003@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/hunterliu1003/vue-use-template#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hunterliu1003/vue-use-template.git"
+  },
+  "bugs": "https://github.com/hunterliu1003/vue-use-template/issues",
   "keywords": [],
   "sideEffects": false,
   "exports": {

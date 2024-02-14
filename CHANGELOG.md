@@ -1,5 +1,12 @@
 
 
+# [0.0.0-beta.5](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.4...0.0.0-beta.5) (2024-02-14)
+
+
+### Features
+
+* nuxt 3 ([56ea1c8](https://github.com/hunterliu1003/vue-use-template/commit/56ea1c83886005b8d49e6880f954825750c16547))
+
 # [0.0.0-beta.4](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.3...0.0.0-beta.4) (2024-02-14)
 
 # [0.0.0-beta.3](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.2...0.0.0-beta.3) (2024-02-14)

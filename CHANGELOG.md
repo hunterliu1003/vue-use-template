@@ -1,5 +1,12 @@
 
 
+# [0.0.0-beta.2](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.1...0.0.0-beta.2) (2024-02-14)
+
+
+### Bug Fixes
+
+* export types ([576f901](https://github.com/hunterliu1003/vue-use-template/commit/576f9013c86a2a1219d307687375b5bb5ed3571f))
+
 # [0.0.0-beta.1](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.0...0.0.0-beta.1) (2024-02-14)
 
 

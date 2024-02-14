@@ -57,6 +57,8 @@ export function createContainer(options?: { name?: string }): CreateContainer {
   }
 }
 
+export const { Container, useTemplate } = createContainer()
+
 /**
  * Create a vNode by passing template.
  */

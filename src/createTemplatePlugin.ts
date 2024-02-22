@@ -1,7 +1,7 @@
 import { tryOnUnmounted } from '@vueuse/core'
-import type { App, Component, VNode } from 'vue'
-import { computed, defineComponent, h, onBeforeUnmount, ref, shallowReactive } from 'vue'
-import type { ComponentSlots } from 'vue-component-type-helpers'
+import type { App, Component, ComputedRef, Ref, VNode } from 'vue'
+import { computed, defineComponent, h, isRef, onBeforeUnmount, ref, shallowReactive, unref } from 'vue'
+import type { ComponentEmit, ComponentProps, ComponentSlots } from 'vue-component-type-helpers'
 import type { Template, TemplatePlugin, UseTemplate } from './types'
 import { isString, objectEntries } from './utils'
 import { useTemplatePluginSymbol } from './injectionSymbols'
@@ -39,17 +39,18 @@ export const Container = defineComponent({
   },
 })
 
-export const useTemplate: UseTemplate = <T extends Component>(template: Template<T>, options?: {
-  onUnmounted?: () => void
-}) => {
-  if (template.attrs)
-    Object.assign(template.attrs, { key: Symbol('vNodeId') })
-
-  const vNodeFn = () => templateToVNode(template)
+export const useTemplate: UseTemplate = <T extends Component>(
+  template: Template<T>,
+  options: Parameters<UseTemplate>[1] = {
+    hideOnUnmounted: true,
+  },
+): ReturnType<UseTemplate> => {
+  const vNodeFn = templateToVNodeFn(template)
   const show = async () => pushVNode(vNodeFn)
   const hide = async () => deleteVNode(vNodeFn)
 
-  tryOnUnmounted(() => options?.onUnmounted ? options.onUnmounted() : hide())
+  if (options?.hideOnUnmounted)
+    tryOnUnmounted(hide)
 
   return { show, hide }
 }
@@ -68,13 +69,6 @@ function deleteVNode(vNodeFn: () => VNode): void {
 }
 
 /**
- * Create a vNode by passing template.
- */
-export function templateToVNode<T extends Component>(template: Template<T>): VNode {
-  return h(template.component, template.attrs, getSlots(template.slots))
-}
-
-/**
  * A type helper to define a template
  */
 export function defineTemplate<T extends Component>(template: Template<T>) {
@@ -88,6 +82,18 @@ export function isTemplate<T extends Component>(value: unknown): value is Templa
     return false
 }
 
+/**
+ * Create a vNode by passing template.
+ */
+export function templateToVNodeFn<T extends Component>(template: Template<T>): () => VNode {
+  const key = Symbol('vNodeFnKey')
+  return () => {
+    const attrs = mergeTemplateAttrs(template)
+    Object.assign(attrs, { key })
+    return h(template.component, attrs, getSlots(template.slots))
+  }
+}
+
 function getSlots<T extends Component>(slots?: {
   [K in keyof ComponentSlots<T>]?: string | Component | Template<Component>
 }) {
@@ -97,9 +103,21 @@ function getSlots<T extends Component>(slots?: {
     if (isString(slot))
       acc[slotName] = () => h('div', { innerHTML: slot })
     else if (isTemplate(slot))
-      acc[slotName] = () => h(slot.component, slot.attrs, slot.slots ? getSlots(slot.slots) : undefined)
+      acc[slotName] = () => h(slot.component, mergeTemplateAttrs(slot), slot.slots ? getSlots(slot.slots) : undefined)
     else
       acc[slotName] = () => h(slot)
     return acc
   }, {})
+}
+
+function getAttrsFromByTemplate<T extends Component>(attrsOrPropsOrEmits?: ComponentProps<T> | Ref<ComponentProps<T>> | ComputedRef<ComponentProps<T>> | ComponentEmit<T>) {
+  return isRef(attrsOrPropsOrEmits) ? unref(attrsOrPropsOrEmits) : attrsOrPropsOrEmits
+}
+
+function mergeTemplateAttrs<T extends Component>(template: Template<T>) {
+  return {
+    ...getAttrsFromByTemplate(template?.attrs),
+    ...getAttrsFromByTemplate(template?.props),
+    ...getAttrsFromByTemplate(template?.emits),
+  }
 }

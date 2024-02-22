@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { defineAsyncComponent, h } from 'vue'
+import { defineAsyncComponent, h, reactive } from 'vue'
 import { defineTemplate, useTemplate } from 'vue-use-template'
+
+const props = reactive({
+  title: 'Hello World!',
+})
 
 const { show, hide } = useTemplate({
   component: defineAsyncComponent(() => import('./DialogConfirm.vue')),
-  attrs: {
-    title: 'Hello World!',
+  props,
+  emits: {
     onConfirm: () => {
-      hide()
+      props.title = 'Confirmed!'
+      setTimeout(() => hide(), 1000)
     },
-    onCancel: () => {
-      hide()
-    },
+    onCancel: () => hide(),
   },
   slots: {
     default: defineTemplate({

@@ -33,6 +33,9 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "cypress/**/*.ts",
+    "cypress/**/*.tsx",
+    "cypress/**/*.vue"
   ]
 }

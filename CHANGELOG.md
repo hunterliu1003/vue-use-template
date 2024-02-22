@@ -1,5 +1,12 @@
 
 
+# [0.0.0-beta.6](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.5...0.0.0-beta.6) (2024-02-22)
+
+
+### Features
+
+* 1. useTemplate support attrs, props, emits with ref, reactive, computed object 2. rename options.onUnmounted to options.hideOnUnmounted 3. add more test cases ([e1fa815](https://github.com/hunterliu1003/vue-use-template/commit/e1fa81528bdd2589f83182eb93b80ad21e953fed))
+
 # [0.0.0-beta.5](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.4...0.0.0-beta.5) (2024-02-14)
 
 

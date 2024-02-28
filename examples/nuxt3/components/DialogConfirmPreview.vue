@@ -26,7 +26,7 @@ show()
 </script>
 
 <template>
-  <VButton @click="() => show()">
+  <button @click="() => show()">
     Open Modal
-  </VButton>
+  </button>
 </template>

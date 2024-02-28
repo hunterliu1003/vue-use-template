@@ -1,41 +1,19 @@
 import { tryOnUnmounted } from '@vueuse/core'
-import type { App, Component, ComputedRef, Ref, VNode } from 'vue'
-import { computed, defineComponent, h, isRef, onBeforeUnmount, ref, shallowReactive, unref } from 'vue'
+import type { Component, ComputedRef, Ref, VNode } from 'vue'
+import { defineComponent, h, inject, isRef, provide, shallowReactive, unref } from 'vue'
 import type { ComponentEmit, ComponentProps, ComponentSlots } from 'vue-component-type-helpers'
-import type { Template, TemplatePlugin, UseTemplate } from './types'
+import type { Template, UseTemplate } from './types'
 import { isString, objectEntries } from './utils'
-import { useTemplatePluginSymbol } from './injectionSymbols'
-import { setActiveTemplatePlugin, useTemplatePlugin } from './useTemplatePlugin'
+import { templateProvideSymbol } from './injectionSymbols'
 
-export function createTemplatePlugin() {
-  const vNodeFns: (() => VNode)[] = shallowReactive([])
-  const containers = ref<symbol[]>([])
+export const TemplateProvider = defineComponent({
+  name: 'TemplateProvider',
+  setup(_props, { slots }) {
+    const vNodeFns: (() => VNode)[] = shallowReactive([])
 
-  const templatePlugin: TemplatePlugin = {
-    install: (app: App) => {
-      app.provide(useTemplatePluginSymbol, templatePlugin)
-    },
-    vNodeFns,
-    containers,
-  }
+    provide(templateProvideSymbol, { vNodeFns })
 
-  setActiveTemplatePlugin(templatePlugin)
-
-  return templatePlugin
-}
-
-export const Container = defineComponent({
-  name: 'Container',
-  setup() {
-    const { vNodeFns, containers } = useTemplatePlugin()
-    const uid = Symbol('uid')
-    const shouldMount = computed(() => uid === containers.value?.[0])
-    containers.value.push(uid)
-    onBeforeUnmount(() => {
-      containers.value = containers.value.filter(i => i !== uid)
-    })
-
-    return () => shouldMount.value ? vNodeFns.map(vNodeFn => vNodeFn()) : null
+    return () => [slots.default?.(), vNodeFns.map(vNodeFn => vNodeFn())]
   },
 })
 
@@ -45,9 +23,15 @@ export const useTemplate: UseTemplate = <T extends Component>(
     hideOnUnmounted: true,
   },
 ): ReturnType<UseTemplate> => {
+  const templateContext = inject(templateProvideSymbol)
+
+  if (!templateContext)
+    throw new Error('useTemplate must be called within TemplateProvider')
+
+  const { vNodeFns } = templateContext
   const vNodeFn = templateToVNodeFn(template)
-  const show = async () => pushVNode(vNodeFn)
-  const hide = async () => deleteVNode(vNodeFn)
+  const show = async () => pushVNode(vNodeFns, vNodeFn)
+  const hide = async () => deleteVNode(vNodeFns, vNodeFn)
 
   if (options?.hideOnUnmounted)
     tryOnUnmounted(hide)
@@ -55,14 +39,12 @@ export const useTemplate: UseTemplate = <T extends Component>(
   return { show, hide }
 }
 
-function pushVNode(vNodeFn: () => VNode) {
-  const { vNodeFns } = useTemplatePlugin()
+function pushVNode(vNodeFns: (() => VNode)[], vNodeFn: () => VNode) {
   if (!vNodeFns.includes(vNodeFn))
     vNodeFns.push(vNodeFn)
 }
 
-function deleteVNode(vNodeFn: () => VNode): void {
-  const { vNodeFns } = useTemplatePlugin()
+function deleteVNode(vNodeFns: (() => VNode)[], vNodeFn: () => VNode): void {
   const index = vNodeFns.indexOf(vNodeFn)
   if (index !== undefined && index !== -1)
     vNodeFns.splice(index, 1)

@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vue": "3.3.7",
-    "vue-use-template": "0.0.0-beta.6"
+    "vue-use-template": "workspace:0.0.0-beta.6"
   },
   "devDependencies": {
     "@iconify/vue": "^4.1.1",

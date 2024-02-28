@@ -1,4 +1,4 @@
 import type { InjectionKey } from 'vue'
-import type { TemplatePlugin } from './types'
+import type { TemplateProvide } from './types'
 
-export const useTemplatePluginSymbol = Symbol('useTemplatePlugin') as InjectionKey<TemplatePlugin>
+export const templateProvideSymbol = Symbol('templateProvide') as InjectionKey<TemplateProvide>

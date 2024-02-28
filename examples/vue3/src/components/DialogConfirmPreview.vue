@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, h, reactive } from 'vue'
 import { defineTemplate, useTemplate } from 'vue-use-template'
+import VButton from './VButton.vue'
 
 const props = reactive({
   title: 'Hello World!',

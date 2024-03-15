@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent, h } from 'vue'
-import { Container, defineTemplate, useTemplate } from '../../src/index'
+import { TemplateProvider, defineTemplate, useTemplate } from '../../src/index'
 
 const { show, hide } = useTemplate({
   component: defineAsyncComponent(() => import('./DialogConfirm.vue')),
@@ -19,11 +19,9 @@ show()
 </script>
 
 <template>
-  <div>
+  <TemplateProvider>
     <button @click="() => show()">
       Open Modal
     </button>
-
-    <Container />
-  </div>
+  </TemplateProvider>
 </template>

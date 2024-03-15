@@ -1,4 +1,4 @@
 /** Types */
 export * from './types'
 
-export * from './createTemplatePlugin'
+export * from './useTemplate'

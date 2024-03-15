@@ -1,12 +1,11 @@
 import { defineAsyncComponent, h, reactive, ref } from 'vue'
-import { Container, createTemplatePlugin, defineTemplate, useTemplate } from '../../src/index'
+import { TemplateProvider, defineTemplate, useTemplate } from '../../src/index'
 import DialogConfirmPreview from './DialogConfirmPreview.vue'
 import HideOnUnmounted from './HideOnUnmounted.vue'
 
 describe('test useTemplate()', () => {
   it('hello world - createTemplatePlugin', () => {
-    const templatePlugin = createTemplatePlugin()
-    cy.mount(Container as any, { global: { plugins: [templatePlugin] } }).as('container')
+    cy.mount(TemplateProvider as any).as('container')
 
     const text = 'Hello World!'
     const { show, hide } = useTemplate({ component: () => h('div', text) })
@@ -19,8 +18,7 @@ describe('test useTemplate()', () => {
   })
 
   it('DialogConfirm - given static attrs', () => {
-    const templatePlugin = createTemplatePlugin()
-    cy.mount(Container as any, { global: { plugins: [templatePlugin] } }).as('container')
+    cy.mount(TemplateProvider as any).as('container')
 
     const title = 'Hello World!'
     const content = 'This is a dialog content.'
@@ -67,8 +65,7 @@ describe('test useTemplate()', () => {
   })
 
   it('DialogConfirm - given ref props', () => {
-    const templatePlugin = createTemplatePlugin()
-    cy.mount(Container as any, { global: { plugins: [templatePlugin] } }).as('container')
+    cy.mount(TemplateProvider as any).as('container')
 
     const props = ref({ title: 'Hello World!' })
     const content = 'This is a dialog content.'
@@ -122,8 +119,7 @@ describe('test useTemplate()', () => {
   })
 
   it('DialogConfirm - given reactive props', () => {
-    const templatePlugin = createTemplatePlugin()
-    cy.mount(Container as any, { global: { plugins: [templatePlugin] } }).as('container')
+    cy.mount(TemplateProvider as any).as('container')
 
     const props = reactive({ title: 'Hello World!' })
     const content = 'This is a dialog content.'
@@ -177,8 +173,7 @@ describe('test useTemplate()', () => {
   })
 
   it('DialogConfirmPreview', () => {
-    const templatePlugin = createTemplatePlugin()
-    cy.mount(DialogConfirmPreview, { global: { plugins: [templatePlugin] } }).as('container')
+    cy.mount(DialogConfirmPreview).as('container')
 
     cy.get('dialog').should('exist')
     cy.contains('button', 'Cancel').click()
@@ -202,9 +197,7 @@ describe('test useTemplate()', () => {
 
 describe('test useTemplate() options', () => {
   it('hideOnUnmounted: false', () => {
-    const templatePlugin = createTemplatePlugin()
     cy.mount(HideOnUnmounted, {
-      global: { plugins: [templatePlugin] },
       props: {
         hideOnUnmounted: false,
       },
@@ -223,9 +216,7 @@ describe('test useTemplate() options', () => {
     })
   })
   it('hideOnUnmounted: true', () => {
-    const templatePlugin = createTemplatePlugin()
     cy.mount(HideOnUnmounted, {
-      global: { plugins: [templatePlugin] },
       props: {
         hideOnUnmounted: true,
       },

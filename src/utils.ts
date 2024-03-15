@@ -1,17 +1,9 @@
 import { h, isRef, unref } from 'vue'
-import type { Component, ComputedRef, Ref, VNode } from 'vue'
+import type { Component, ComputedRef, InjectionKey, Ref, VNode } from 'vue'
 import type { ComponentEmit, ComponentProps, ComponentSlots } from 'vue-component-type-helpers'
-import type { Template } from './types'
+import type { Template, UseTemplateProvider } from './types'
 
-export const isString = (value: unknown): value is string => typeof value === 'string'
-
-type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T][]
-/**
- * Type safe variant of `Object.entries()`
- */
-export function objectEntries<T extends Record<any, any>>(object: T): Entries<T> {
-  return Object.entries(object) as any
-}
+export const useTemplateProviderSymbol = Symbol('useTemplateProvider') as InjectionKey<UseTemplateProvider>
 
 export function isTemplate<T extends Component>(value: unknown): value is Template<T> {
   if (typeof value === 'object' && value !== null)
@@ -58,4 +50,16 @@ function mergeTemplateAttrs<T extends Component>(template: Template<T>) {
 
 function getAttrsFromByTemplate<T extends Component>(attrsOrPropsOrEmits?: ComponentProps<T> | Ref<ComponentProps<T>> | ComputedRef<ComponentProps<T>> | ComponentEmit<T>) {
   return isRef(attrsOrPropsOrEmits) ? unref(attrsOrPropsOrEmits) : attrsOrPropsOrEmits
+}
+
+function isString(value: unknown): value is string {
+  return typeof value === 'string'
+}
+
+type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T][]
+/**
+ * Type safe variant of `Object.entries()`
+ */
+function objectEntries<T extends Record<any, any>>(object: T): Entries<T> {
+  return Object.entries(object) as any
 }

@@ -1,14 +1,19 @@
 import { tryOnUnmounted } from '@vueuse/core'
-import type { Component, VNode } from 'vue'
-import { defineComponent, h, inject, provide, shallowReactive } from 'vue'
-import type { Template, UseTemplate } from './types'
-import { templateToVNodeFn } from './utils'
-import { templateSymbol } from './injectionSymbols'
+import type { Component } from 'vue'
+import { defineComponent, getCurrentInstance, h, inject, nextTick, provide, shallowReactive } from 'vue'
+import type { Template, UseTemplate, UseTemplateProvider } from './types'
+import { templateToVNodeFn, useTemplateProviderSymbol } from './utils'
+
+let activeUseTemplateProvide: UseTemplateProvider | undefined
+
+function useTemplateProvider() {
+  return getCurrentInstance() ? inject(useTemplateProviderSymbol) : activeUseTemplateProvide
+}
 
 const TemplateContainer = defineComponent({
   name: 'TemplateContainer',
   setup() {
-    const { vNodeFns } = inject(templateSymbol, { vNodeFns: [] })
+    const { vNodeFns } = inject(useTemplateProviderSymbol, { vNodeFns: [] })
     return () => vNodeFns.map(vNodeFn => vNodeFn())
   },
 })
@@ -16,8 +21,11 @@ const TemplateContainer = defineComponent({
 export const TemplateProvider = defineComponent({
   name: 'TemplateProvider',
   setup(_props, { slots }) {
-    const vNodeFns: (() => VNode)[] = shallowReactive([])
-    provide(templateSymbol, { vNodeFns })
+    const useTemplateProvide: UseTemplateProvider = {
+      vNodeFns: shallowReactive([]),
+    }
+    provide(useTemplateProviderSymbol, useTemplateProvide)
+    activeUseTemplateProvide = useTemplateProvide
     return () => [slots.default?.(), h(TemplateContainer)]
   },
 })
@@ -35,27 +43,36 @@ export const useTemplate: UseTemplate = <T extends Component>(
     hideOnUnmounted: true,
   },
 ): ReturnType<UseTemplate> => {
-  const templateContext = inject(templateSymbol)
+  const currentInstance = getCurrentInstance()
+  const injectedTemplateProvide = (currentInstance && activeUseTemplateProvide) ? inject(useTemplateProviderSymbol) : undefined
+  const shouldNextTick = !!currentInstance && !injectedTemplateProvide
 
-  if (!templateContext)
-    throw new Error('useTemplate must be called within TemplateProvider')
+  nextTick(() => {
+    if (!activeUseTemplateProvide)
+      throw new Error('useTemplate must be called within TemplateProvider')
+  })
 
-  const { vNodeFns } = templateContext
+  if (options?.hideOnUnmounted)
+    tryOnUnmounted(hide)
+
   const vNodeFn = templateToVNodeFn(template)
 
   async function show() {
+    if (shouldNextTick)
+      await nextTick()
+    const { vNodeFns } = useTemplateProvider()!
     if (!vNodeFns.includes(vNodeFn))
       vNodeFns.push(vNodeFn)
   }
 
   async function hide() {
+    if (shouldNextTick)
+      await nextTick()
+    const { vNodeFns } = useTemplateProvider()!
     const index = vNodeFns.indexOf(vNodeFn)
     if (index !== undefined && index !== -1)
       vNodeFns.splice(index, 1)
   }
-
-  if (options?.hideOnUnmounted)
-    tryOnUnmounted(hide)
 
   return { show, hide }
 }

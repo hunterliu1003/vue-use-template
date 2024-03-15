@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { Container } from 'vue-use-template'
+import { TemplateProvider } from 'vue-use-template'
 </script>
 
 <template>
   <div>
-    <NuxtPage />
-    <Container />
+    <TemplateProvider>
+      <NuxtPage />
+    </TemplateProvider>
   </div>
 </template>

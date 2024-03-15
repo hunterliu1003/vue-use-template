@@ -1,4 +1,4 @@
-import type { App, Component, ComputedRef, Ref, VNode } from 'vue'
+import type { Component, ComputedRef, Ref, VNode } from 'vue'
 import type { ComponentProps, ComponentSlots } from 'vue-component-type-helpers'
 
 type PickComponentEmits<T extends object> = {
@@ -20,10 +20,8 @@ export interface Template<T extends Component> {
   }
 }
 
-export interface TemplatePlugin {
-  install: (app: App) => void
+export interface UseTemplateProvider {
   vNodeFns: (() => VNode)[]
-  containers: Ref<symbol[]>
 }
 
 export type UseTemplate = <T extends Component>(
@@ -32,5 +30,4 @@ export type UseTemplate = <T extends Component>(
 ) => {
   show: () => Promise<void>
   hide: () => Promise<void>
-  // TemplateComponent: Component
 }

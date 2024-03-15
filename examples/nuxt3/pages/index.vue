@@ -3,7 +3,7 @@ import DialogConfirmPreview from '../components/DialogConfirmPreview.vue'
 </script>
 
 <template>
-  <div>
+  <div class="h-screen flex items-center justify-center">
     <DialogConfirmPreview />
   </div>
 </template>

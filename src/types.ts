@@ -20,7 +20,7 @@ export interface Template<T extends Component> {
   }
 }
 
-export interface UseTemplateProvider {
+export interface Provider {
   vNodeFns: (() => VNode)[]
 }
 

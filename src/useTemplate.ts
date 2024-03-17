@@ -1,34 +1,9 @@
 import { tryOnUnmounted } from '@vueuse/core'
 import type { Component } from 'vue'
-import { defineComponent, getCurrentInstance, h, inject, nextTick, provide, shallowReactive } from 'vue'
-import type { Template, UseTemplate, UseTemplateProvider } from './types'
-import { templateToVNodeFn, useTemplateProviderSymbol } from './utils'
-
-let activeUseTemplateProvide: UseTemplateProvider | undefined
-
-function useTemplateProvider() {
-  return getCurrentInstance() ? inject(useTemplateProviderSymbol) : activeUseTemplateProvide
-}
-
-const TemplateContainer = defineComponent({
-  name: 'TemplateContainer',
-  setup() {
-    const { vNodeFns } = inject(useTemplateProviderSymbol, { vNodeFns: [] })
-    return () => vNodeFns.map(vNodeFn => vNodeFn())
-  },
-})
-
-export const TemplateProvider = defineComponent({
-  name: 'TemplateProvider',
-  setup(_props, { slots }) {
-    const useTemplateProvide: UseTemplateProvider = {
-      vNodeFns: shallowReactive([]),
-    }
-    provide(useTemplateProviderSymbol, useTemplateProvide)
-    activeUseTemplateProvide = useTemplateProvide
-    return () => [slots.default?.(), h(TemplateContainer)]
-  },
-})
+import { nextTick } from 'vue'
+import type { Template, UseTemplate } from './types'
+import { templateToVNodeFn } from './utils'
+import { shouldNextTick, useProvider } from './templateProvider'
 
 /**
  * A type helper to define a template
@@ -37,20 +12,29 @@ export function defineTemplate<T extends Component>(template: Template<T>) {
   return template
 }
 
+/**
+ * `useTemplate()` depends on `<TemplateProvider />` to work properly.
+ * This means that the Provider needs to be set up before `useTemplate()` can be used.
+ *
+ * However, if you try to use `useTemplate()` before `<TemplateProvider />` is ready, it will cause an error.
+ * To fix this issue, we use `nextTick()` to wait until `<TemplateProvider />` is ready.
+ * If it's still not ready after `nextTick()`, an error will be thrown.
+ *
+ * Note:
+ * - Using `useTemplate()` inside `<TemplateProvider />` works with server-side rendering (SSR).
+ * - Using `useTemplate()` outside of `<TemplateProvider />` won't work with SSR,
+ *   but it still works fine on the client-side without causing server-side errors.
+ */
 export const useTemplate: UseTemplate = <T extends Component>(
   template: Template<T>,
   options: Parameters<UseTemplate>[1] = {
     hideOnUnmounted: true,
   },
 ): ReturnType<UseTemplate> => {
-  const currentInstance = getCurrentInstance()
-  const injectedTemplateProvide = (currentInstance && activeUseTemplateProvide) ? inject(useTemplateProviderSymbol) : undefined
-  const shouldNextTick = !!currentInstance && !injectedTemplateProvide
+  const _nextTick = shouldNextTick()
 
-  nextTick(() => {
-    if (!activeUseTemplateProvide)
-      throw new Error('useTemplate must be called within TemplateProvider')
-  })
+  if (_nextTick)
+    checkError()
 
   if (options?.hideOnUnmounted)
     tryOnUnmounted(hide)
@@ -58,21 +42,28 @@ export const useTemplate: UseTemplate = <T extends Component>(
   const vNodeFn = templateToVNodeFn(template)
 
   async function show() {
-    if (shouldNextTick)
+    if (_nextTick)
       await nextTick()
-    const { vNodeFns } = useTemplateProvider()!
-    if (!vNodeFns.includes(vNodeFn))
-      vNodeFns.push(vNodeFn)
+    const provider = useProvider()
+    if (!provider?.vNodeFns.includes(vNodeFn))
+      provider?.vNodeFns.push(vNodeFn)
   }
 
   async function hide() {
-    if (shouldNextTick)
+    if (_nextTick)
       await nextTick()
-    const { vNodeFns } = useTemplateProvider()!
-    const index = vNodeFns.indexOf(vNodeFn)
+    const provider = useProvider()
+    const index = provider?.vNodeFns.indexOf(vNodeFn)
     if (index !== undefined && index !== -1)
-      vNodeFns.splice(index, 1)
+      provider?.vNodeFns.splice(index, 1)
   }
 
   return { show, hide }
+}
+
+async function checkError() {
+  await nextTick()
+  const provider = useProvider()
+  if (!provider)
+    throw new Error('[vue-use-template] `useTemplate()` must be called within <TemplateProvider />')
 }

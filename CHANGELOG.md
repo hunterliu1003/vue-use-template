@@ -1,5 +1,12 @@
 
 
+# [0.0.0-beta.10](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.9...0.0.0-beta.10) (2024-03-17)
+
+
+### Features
+
+* export templateToVNodeFn, isTemplate ([fcca3a9](https://github.com/hunterliu1003/vue-use-template/commit/fcca3a9384c19d3ba90a9c56c46cbba10317f252))
+
 # [0.0.0-beta.9](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.8...0.0.0-beta.9) (2024-03-17)
 
 

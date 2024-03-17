@@ -28,6 +28,7 @@ export function defineTemplate<T extends Component>(template: Template<T>) {
 export const useTemplate: UseTemplate = <T extends Component>(
   template: Template<T>,
   options: Parameters<UseTemplate>[1] = {
+    showByDefault: false,
     hideOnUnmounted: true,
   },
 ): ReturnType<UseTemplate> => {
@@ -35,6 +36,9 @@ export const useTemplate: UseTemplate = <T extends Component>(
 
   if (_nextTick)
     checkError()
+
+  if (options?.showByDefault)
+    show()
 
   if (options?.hideOnUnmounted)
     tryOnUnmounted(hide)

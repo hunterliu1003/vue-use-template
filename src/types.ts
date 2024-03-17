@@ -26,7 +26,10 @@ export interface Provider {
 
 export type UseTemplate = <T extends Component>(
   template: Template<T>,
-  options?: { hideOnUnmounted?: boolean }
+  options?: {
+    showByDefault?: boolean
+    hideOnUnmounted?: boolean
+  }
 ) => {
   show: () => Promise<void>
   hide: () => Promise<void>

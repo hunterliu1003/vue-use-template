@@ -2,7 +2,8 @@ import { defineComponent, getCurrentInstance, h, inject, provide, shallowReactiv
 import type { Provider } from './types'
 import { providerSymbol } from './utils'
 
-let activeProvider: Provider | undefined
+// eslint-disable-next-line import/no-mutable-exports
+export let activeProvider: Provider | undefined
 
 const TemplateContainer = defineComponent({
   name: 'TemplateContainer',

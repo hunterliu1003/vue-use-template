@@ -1,5 +1,12 @@
 
 
+# [0.0.0-beta.11](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.10...0.0.0-beta.11) (2024-03-17)
+
+
+### Features
+
+* export useProvider ([826fcdc](https://github.com/hunterliu1003/vue-use-template/commit/826fcdce135c983494751e187b304c7e127fea1d))
+
 # [0.0.0-beta.10](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.9...0.0.0-beta.10) (2024-03-17)
 
 

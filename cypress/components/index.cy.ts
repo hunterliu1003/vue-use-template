@@ -3,23 +3,33 @@ import { TemplateProvider, defineTemplate, useTemplate } from '../../src/index'
 import DialogConfirmPreview from './DialogConfirmPreview.vue'
 import HideOnUnmounted from './HideOnUnmounted.vue'
 import ShowByDefault from './ShowByDefault.vue'
+import NestedTemplateProvider from './NestedTemplateProvider.vue'
+
+describe('test <TemplateProvider />', () => {
+  it('nested <TemplateProvider /> should only mount once', () => {
+    cy.mount(NestedTemplateProvider)
+
+    cy.contains('Hello World!').should('exist')
+    cy.get('dialog').should('have.length', 1)
+  })
+})
 
 describe('test useTemplate()', () => {
-  it('hello world - createTemplatePlugin', () => {
-    cy.mount(TemplateProvider as any).as('container')
+  it('hello world - basic useTemplate', () => {
+    cy.mount(TemplateProvider as any).as('templateProvider')
 
     const text = 'Hello World!'
     const { show, hide } = useTemplate({ component: () => h('div', text) })
 
-    cy.get('@container').then(() => show())
+    cy.get('@templateProvider').then(() => show())
     cy.contains(text).should('exist')
 
-    cy.get('@container').then(() => hide())
+    cy.get('@templateProvider').then(() => hide())
     cy.contains(text).should('not.exist')
   })
 
   it('DialogConfirm - given static attrs', () => {
-    cy.mount(TemplateProvider as any).as('container')
+    cy.mount(TemplateProvider as any).as('templateProvider')
 
     const title = 'Hello World!'
     const content = 'This is a dialog content.'
@@ -45,28 +55,28 @@ describe('test useTemplate()', () => {
     })
 
     /** Confirm */
-    cy.get('@container').then(() => show())
+    cy.get('@templateProvider').then(() => show())
     cy.get('dialog').should('exist')
     cy.contains(title)
     cy.contains('p', content)
     cy.contains('button', 'Confirm').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.get('dialog').should('not.exist')
     })
     cy.get('@onConfirm').should('have.callCount', 1)
 
     /** Cancel */
-    cy.get('@container').then(() => show())
+    cy.get('@templateProvider').then(() => show())
     cy.get('dialog').should('exist')
     cy.contains('button', 'Cancel').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.get('dialog').should('not.exist')
     })
     cy.get('@onCancel').should('have.callCount', 1)
   })
 
   it('DialogConfirm - given ref props', () => {
-    cy.mount(TemplateProvider as any).as('container')
+    cy.mount(TemplateProvider as any).as('templateProvider')
 
     const props = ref({ title: 'Hello World!' })
     const content = 'This is a dialog content.'
@@ -92,35 +102,35 @@ describe('test useTemplate()', () => {
     })
 
     /** Confirm */
-    cy.get('@container').then(() => show())
+    cy.get('@templateProvider').then(() => show())
     cy.get('dialog').should('exist')
     cy.contains(props.value.title)
     cy.contains('p', content)
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       props.value.title = 'Title Changed!'
     })
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.contains('Title Changed!')
     })
 
     cy.contains('button', 'Confirm').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.get('dialog').should('not.exist')
     })
     cy.get('@onConfirm').should('have.callCount', 1)
 
     /** Cancel */
-    cy.get('@container').then(() => show())
+    cy.get('@templateProvider').then(() => show())
     cy.get('dialog').should('exist')
     cy.contains('button', 'Cancel').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.get('dialog').should('not.exist')
     })
     cy.get('@onCancel').should('have.callCount', 1)
   })
 
   it('DialogConfirm - given reactive props', () => {
-    cy.mount(TemplateProvider as any).as('container')
+    cy.mount(TemplateProvider as any).as('templateProvider')
 
     const props = reactive({ title: 'Hello World!' })
     const content = 'This is a dialog content.'
@@ -146,51 +156,51 @@ describe('test useTemplate()', () => {
     })
 
     /** Confirm */
-    cy.get('@container').then(() => show())
+    cy.get('@templateProvider').then(() => show())
     cy.get('dialog').should('exist')
     cy.contains(props.title)
     cy.contains('p', content)
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       props.title = 'Title Changed!'
     })
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.contains('Title Changed!')
     })
 
     cy.contains('button', 'Confirm').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.get('dialog').should('not.exist')
     })
     cy.get('@onConfirm').should('have.callCount', 1)
 
     /** Cancel */
-    cy.get('@container').then(() => show())
+    cy.get('@templateProvider').then(() => show())
     cy.get('dialog').should('exist')
     cy.contains('button', 'Cancel').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.get('dialog').should('not.exist')
     })
     cy.get('@onCancel').should('have.callCount', 1)
   })
 
   it('DialogConfirmPreview', () => {
-    cy.mount(DialogConfirmPreview).as('container')
+    cy.mount(DialogConfirmPreview).as('templateProvider')
 
     cy.get('dialog').should('exist')
     cy.contains('button', 'Cancel').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.get('dialog').should('not.exist')
     })
     cy.contains('button', 'Open Modal').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.get('dialog').should('exist')
     })
     cy.contains('button', 'Cancel').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.get('dialog').should('not.exist')
     })
     cy.contains('button', 'Open Modal').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.get('dialog').should('exist')
     })
   })
@@ -204,7 +214,7 @@ describe('test useTemplate() options', () => {
       props: {
         showByDefault: false,
       },
-    }).as('container')
+    }).as('templateProvider')
 
     cy.contains('Hello World!').should('not.exist')
   })
@@ -215,7 +225,7 @@ describe('test useTemplate() options', () => {
       props: {
         showByDefault: true,
       },
-    }).as('container')
+    }).as('templateProvider')
 
     cy.contains('Hello World!').should('exist')
   })
@@ -224,17 +234,17 @@ describe('test useTemplate() options', () => {
       props: {
         hideOnUnmounted: false,
       },
-    }).as('container')
+    }).as('templateProvider')
 
     cy.contains('Hello World!').should('not.exist')
 
     cy.contains('button', 'Open Modal').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.contains('Hello World!').should('exist')
     })
 
     cy.contains('button', 'Hide OnUnmountedDialog').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.contains('Hello World!').should('exist')
     })
   })
@@ -243,17 +253,17 @@ describe('test useTemplate() options', () => {
       props: {
         hideOnUnmounted: true,
       },
-    }).as('container')
+    }).as('templateProvider')
 
     cy.contains('Hello World!').should('not.exist')
 
     cy.contains('button', 'Open Modal').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.contains('Hello World!').should('exist')
     })
 
     cy.contains('button', 'Hide OnUnmountedDialog').click()
-    cy.get('@container').then(() => {
+    cy.get('@templateProvider').then(() => {
       cy.contains('Hello World!').should('not.exist')
     })
   })

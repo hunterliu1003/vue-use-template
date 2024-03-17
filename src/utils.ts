@@ -1,9 +1,9 @@
 import { h, isRef, unref } from 'vue'
 import type { Component, ComputedRef, InjectionKey, Ref, VNode } from 'vue'
 import type { ComponentEmit, ComponentProps, ComponentSlots } from 'vue-component-type-helpers'
-import type { Template, UseTemplateProvider } from './types'
+import type { Provider, Template } from './types'
 
-export const useTemplateProviderSymbol = Symbol('useTemplateProvider') as InjectionKey<UseTemplateProvider>
+export const providerSymbol = Symbol('provider') as InjectionKey<Provider>
 
 export function isTemplate<T extends Component>(value: unknown): value is Template<T> {
   if (typeof value === 'object' && value !== null)

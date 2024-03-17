@@ -1,5 +1,12 @@
 
 
+# [0.0.0-beta.9](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.8...0.0.0-beta.9) (2024-03-17)
+
+
+### Features
+
+* add showByDefault option to useTemplate ([962c168](https://github.com/hunterliu1003/vue-use-template/commit/962c168cfa43a43226bcf6238216b203a61e1de7))
+
 # [0.0.0-beta.8](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.7...0.0.0-beta.8) (2024-03-17)
 
 # [0.0.0-beta.7](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.6...0.0.0-beta.7) (2024-03-15)

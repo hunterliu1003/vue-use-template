@@ -2,6 +2,7 @@ import { defineAsyncComponent, h, reactive, ref } from 'vue'
 import { TemplateProvider, defineTemplate, useTemplate } from '../../src/index'
 import DialogConfirmPreview from './DialogConfirmPreview.vue'
 import HideOnUnmounted from './HideOnUnmounted.vue'
+import ShowByDefault from './ShowByDefault.vue'
 
 describe('test useTemplate()', () => {
   it('hello world - createTemplatePlugin', () => {
@@ -196,6 +197,28 @@ describe('test useTemplate()', () => {
 })
 
 describe('test useTemplate() options', () => {
+  it('showByDefault: false', () => {
+    cy.contains('Hello World!').should('not.exist')
+
+    cy.mount(ShowByDefault, {
+      props: {
+        showByDefault: false,
+      },
+    }).as('container')
+
+    cy.contains('Hello World!').should('not.exist')
+  })
+  it('showByDefault: true', () => {
+    cy.contains('Hello World!').should('not.exist')
+
+    cy.mount(ShowByDefault, {
+      props: {
+        showByDefault: true,
+      },
+    }).as('container')
+
+    cy.contains('Hello World!').should('exist')
+  })
   it('hideOnUnmounted: false', () => {
     cy.mount(HideOnUnmounted, {
       props: {

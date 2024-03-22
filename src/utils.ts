@@ -3,7 +3,7 @@ import type { Component, ComputedRef, InjectionKey, Ref, VNode } from 'vue'
 import type { ComponentEmit, ComponentProps, ComponentSlots } from 'vue-component-type-helpers'
 import type { Provider, Template } from './types'
 
-export const providerSymbol = Symbol('provider') as InjectionKey<Provider>
+export const providerSymbol = Symbol(import.meta.env.DEV ? 'provider' : '') as InjectionKey<Provider>
 
 export function isTemplate<T extends Component>(value: unknown): value is Template<T> {
   if (typeof value === 'object' && value !== null)
@@ -16,7 +16,7 @@ export function isTemplate<T extends Component>(value: unknown): value is Templa
  * Create a vNode by passing `Template`.
  */
 export function templateToVNodeFn<T extends Component>(template: Template<T>): () => VNode {
-  const key = Symbol('vNodeFnKey')
+  const key = Symbol(import.meta.env.DEV ? 'vNodeFnKey' : '')
   return () => {
     const attrs = mergeTemplateAttrs(template)
     Object.assign(attrs, { key })
@@ -30,7 +30,7 @@ function getSlots<T extends Component>(slots?: {
   return objectEntries(slots || {}).reduce<Record<string, () => VNode>>((acc, cur) => {
     const slotName = cur[0] as string
     const slot = cur[1] as string | Component | Template<Component>
-    if (isString(slot))
+    if (typeof slot === 'string')
       acc[slotName] = () => h('div', { innerHTML: slot })
     else if (isTemplate(slot))
       acc[slotName] = () => h(slot.component, mergeTemplateAttrs(slot), slot.slots ? getSlots(slot.slots) : undefined)
@@ -50,10 +50,6 @@ function mergeTemplateAttrs<T extends Component>(template: Template<T>) {
 
 function getAttrsFromByTemplate<T extends Component>(attrsOrPropsOrEmits?: ComponentProps<T> | Ref<ComponentProps<T>> | ComputedRef<ComponentProps<T>> | ComponentEmit<T>) {
   return isRef(attrsOrPropsOrEmits) ? unref(attrsOrPropsOrEmits) : attrsOrPropsOrEmits
-}
-
-function isString(value: unknown): value is string {
-  return typeof value === 'string'
 }
 
 type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T][]

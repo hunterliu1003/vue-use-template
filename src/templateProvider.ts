@@ -16,7 +16,12 @@ const TemplateContainer = defineComponent({
 export const TemplateProvider = defineComponent({
   name: 'TemplateProvider',
   setup(_props, { slots }) {
-    initProvider()
+    const provider: Provider = {
+      vNodeFns: shallowReactive([]),
+    }
+    provide(providerSymbol, provider)
+    activeProvider = provider
+
     return () => [slots.default?.(), h(TemplateContainer)]
   },
 })
@@ -26,19 +31,6 @@ export function useProvider() {
     /** Do not give a default value to inject, so that it will throw an error if not provided */
     ? inject(providerSymbol)
     : activeProvider
-}
-
-function initProvider() {
-  const provider = createProvider()
-  provide(providerSymbol, provider)
-  activeProvider = provider
-}
-
-function createProvider(): Provider {
-  const useTemplateProvide: Provider = {
-    vNodeFns: shallowReactive([]),
-  }
-  return useTemplateProvide
 }
 
 /**

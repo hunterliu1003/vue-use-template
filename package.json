@@ -42,7 +42,8 @@
     "typecheck": "vue-tsc --noEmit",
     "release": "pnpm build && pnpm cypress:run && release-it",
     "cypress:open": "cypress open --browser electron --component",
-    "cypress:run": "cypress run --component"
+    "cypress:run": "cypress run --component",
+    "bundle-visualizer": "vite-bundle-visualizer -t sunburst"
   },
   "peerDependencies": {
     "@vueuse/core": "^10.7.2",
@@ -64,6 +65,7 @@
     "simple-git-hooks": "^2.9.0",
     "typescript": "^5.2.2",
     "vite": "^4.5.2",
+    "vite-bundle-visualizer": "^1.1.0",
     "vite-plugin-dts": "^3.7.2",
     "vue": "^3.4.15",
     "vue-component-type-helpers": "^1.8.27",

@@ -1,6 +1,14 @@
 /** Types */
 export * from './types'
 
-export * from './useTemplate'
-export * from './templateProvider'
-export * from './utils'
+export {
+  defineTemplate,
+  useTemplate,
+} from './useTemplate'
+export {
+  TemplateProvider,
+} from './templateProvider'
+export {
+  isTemplate,
+  templateToVNodeFn,
+} from './utils'

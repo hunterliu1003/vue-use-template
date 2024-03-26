@@ -11,4 +11,5 @@ export {
 export {
   isTemplate,
   templateToVNodeFn,
+  mergeTemplateAttrs,
 } from './utils'

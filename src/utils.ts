@@ -40,7 +40,7 @@ function getSlots<T extends Component>(slots?: {
   }, {})
 }
 
-function mergeTemplateAttrs<T extends Component>(template: Template<T>) {
+export function mergeTemplateAttrs<T extends Component>(template: Template<T>) {
   return {
     ...getAttrsFromByTemplate(template?.attrs),
     ...getAttrsFromByTemplate(template?.props),

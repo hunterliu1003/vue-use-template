@@ -1,5 +1,12 @@
 
 
+## [0.0.1](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0...0.0.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* ReferenceError: Cannot access 'vNodeFn' before initialization ([b159e1d](https://github.com/hunterliu1003/vue-use-template/commit/b159e1d728306135fd51f55d44d1649e541f45e8))
+
 # [0.0.0](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.11...0.0.0) (2024-03-26)
 
 # [0.0.0-beta.11](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.10...0.0.0-beta.11) (2024-03-17)

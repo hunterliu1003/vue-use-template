@@ -1,5 +1,12 @@
 
 
+## [0.0.2](https://github.com/hunterliu1003/vue-use-template/compare/0.0.1...0.0.2) (2024-03-26)
+
+
+### Features
+
+* export mergeTemplateAttrs ([6f54565](https://github.com/hunterliu1003/vue-use-template/commit/6f54565b318fe547655728ae85e9703d9ab87803))
+
 ## [0.0.1](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0...0.0.1) (2024-03-26)
 
 

@@ -37,12 +37,6 @@ export const useTemplate: UseTemplate = <T extends Component>(
   if (_nextTick)
     checkError()
 
-  if (options?.showByDefault)
-    show()
-
-  if (options?.hideOnUnmounted)
-    tryOnUnmounted(hide)
-
   const vNodeFn = templateToVNodeFn(template)
 
   async function show() {
@@ -61,6 +55,12 @@ export const useTemplate: UseTemplate = <T extends Component>(
     if (index !== undefined && index !== -1)
       provider?.vNodeFns.splice(index, 1)
   }
+
+  if (options?.showByDefault)
+    show()
+
+  if (options?.hideOnUnmounted)
+    tryOnUnmounted(hide)
 
   return { show, hide }
 }

@@ -1,5 +1,12 @@
 
 
+## [0.0.3](https://github.com/hunterliu1003/vue-use-template/compare/0.0.2...0.0.3) (2024-03-27)
+
+
+### Features
+
+* Allow to pass a ref, reactive, computed object as a parameter to useTemplate() and add test cases ([f2c20f0](https://github.com/hunterliu1003/vue-use-template/commit/f2c20f009cefc478e9b382bf2024bdd5c0d82d58))
+
 ## [0.0.2](https://github.com/hunterliu1003/vue-use-template/compare/0.0.1...0.0.2) (2024-03-26)
 
 

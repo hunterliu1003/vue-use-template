@@ -1,5 +1,5 @@
 import { h, toValue, unref } from 'vue'
-import type { Component, InjectionKey, ToRefs, VNode } from 'vue'
+import type { Component, InjectionKey, VNode } from 'vue'
 import type { ComponentSlots } from 'vue-component-type-helpers'
 import type { MaybeRefOrComputedRef, Provider, Template } from './types'
 
@@ -16,7 +16,7 @@ export function isTemplate<T extends Component>(template: unknown): template is 
 /**
  * Create a vNode by passing `Template`.
  */
-export function templateToVNodeFn<T extends Component>(template: MaybeRefOrComputedRef<Template<T>> | ToRefs<Template<T>>): () => VNode {
+export function templateToVNodeFn<T extends Component>(template: MaybeRefOrComputedRef<Template<T>>): () => VNode {
   const key = Symbol(import.meta.env.DEV ? 'vNodeFnKey' : '')
   return () => {
     const _template = unref(template)
@@ -42,7 +42,7 @@ function getSlots<T extends Component>(slots?: {
   }, {})
 }
 
-export function mergeTemplateAttrs<T extends Component>(template: Template<T> | ToRefs<Template<T>>) {
+export function mergeTemplateAttrs<T extends Component>(template: Template<T>) {
   return {
     ...unref(template?.attrs),
     ...unref(template?.props),

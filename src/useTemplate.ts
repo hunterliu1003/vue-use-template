@@ -1,7 +1,7 @@
 import { tryOnUnmounted } from '@vueuse/core'
 import type { Component } from 'vue'
 import { nextTick } from 'vue'
-import type { Template, UseTemplate } from './types'
+import type { MaybeRefOrComputedRef, Template, UseTemplate } from './types'
 import { templateToVNodeFn } from './utils'
 import { shouldNextTick, useProvider } from './templateProvider'
 
@@ -26,7 +26,7 @@ export function defineTemplate<T extends Component>(template: Template<T>) {
  *   but it still works fine on the client-side without causing server-side errors.
  */
 export const useTemplate: UseTemplate = <T extends Component>(
-  template: Template<T>,
+  template: MaybeRefOrComputedRef<Template<T>>,
   options: Parameters<UseTemplate>[1] = {
     showByDefault: false,
     hideOnUnmounted: true,

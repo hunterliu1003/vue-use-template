@@ -8,7 +8,7 @@ type PickComponentProps<T extends object> = {
   [K in keyof T as K extends `on${Capitalize<string>}` ? never : K]: T[K]
 }
 
-type MaybeRefOrComputedRef<T> = T | Ref<T> | ComputedRef<T>
+export type MaybeRefOrComputedRef<T> = T | Ref<T> | ComputedRef<T>
 
 export interface Template<T extends Component> {
   component: T
@@ -25,7 +25,7 @@ export interface Provider {
 }
 
 export type UseTemplate = <T extends Component>(
-  template: Template<T>,
+  template: MaybeRefOrComputedRef<Template<T>>,
   options?: {
     showByDefault?: boolean
     hideOnUnmounted?: boolean

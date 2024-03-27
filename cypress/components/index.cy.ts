@@ -1,9 +1,12 @@
-import { defineAsyncComponent, h, reactive, ref } from 'vue'
+import type { Ref } from 'vue'
+import { defineAsyncComponent, h, markRaw, reactive, ref } from 'vue'
+import type { Template } from '../../src/index'
 import { TemplateProvider, defineTemplate, useTemplate } from '../../src/index'
 import DialogConfirmPreview from './DialogConfirmPreview.vue'
 import HideOnUnmounted from './HideOnUnmounted.vue'
 import ShowByDefault from './ShowByDefault.vue'
 import NestedTemplateProvider from './NestedTemplateProvider.vue'
+import type DialogConfirm from './DialogConfirm.vue'
 
 describe('test <TemplateProvider />', () => {
   it('nested <TemplateProvider /> should only mount once', () => {
@@ -181,6 +184,72 @@ describe('test useTemplate()', () => {
       cy.get('dialog').should('not.exist')
     })
     cy.get('@onCancel').should('have.callCount', 1)
+  })
+
+  it('DialogConfirm - given ref template', () => {
+    cy.mount(TemplateProvider as any).as('templateProvider')
+
+    const template = ref({
+      component: markRaw(defineAsyncComponent(() => import('./DialogConfirm.vue'))),
+      props: { title: 'Hello World!' },
+    }) satisfies Ref<Template<typeof DialogConfirm>>
+
+    const { show } = useTemplate(template)
+
+    /** Confirm */
+    cy.get('@templateProvider').then(() => show())
+    cy.get('dialog').should('exist')
+    cy.contains(template.value.props.title)
+    cy.get('@templateProvider').then(() => {
+      template.value.props.title = 'Title Changed!'
+    })
+    cy.get('@templateProvider').then(() => {
+      cy.contains('Title Changed!')
+    })
+  })
+
+  it('DialogConfirm - given reactive template', () => {
+    cy.mount(TemplateProvider as any).as('templateProvider')
+
+    const template = reactive({
+      component: markRaw(defineAsyncComponent(() => import('./DialogConfirm.vue'))),
+      props: { title: 'Hello World!' },
+    }) satisfies Template<typeof DialogConfirm>
+
+    const { show } = useTemplate(template)
+
+    /** Confirm */
+    cy.get('@templateProvider').then(() => show())
+    cy.get('dialog').should('exist')
+    cy.contains(template.props.title)
+    cy.get('@templateProvider').then(() => {
+      template.props.title = 'Title Changed!'
+    })
+    cy.get('@templateProvider').then(() => {
+      cy.contains('Title Changed!')
+    })
+  })
+
+  it('DialogConfirm - given plain object template', () => {
+    cy.mount(TemplateProvider as any).as('templateProvider')
+
+    const template = {
+      component: defineAsyncComponent(() => import('./DialogConfirm.vue')),
+      props: { title: 'Hello World!' },
+    } satisfies Template<typeof DialogConfirm>
+
+    const { show } = useTemplate(template)
+
+    /** Confirm */
+    cy.get('@templateProvider').then(() => show())
+    cy.get('dialog').should('exist')
+    cy.contains(template.props.title)
+    cy.get('@templateProvider').then(() => {
+      template.props.title = 'Title Changed!'
+    })
+    cy.get('@templateProvider').then(() => {
+      cy.contains('Title Changed!').should('not.exist')
+    })
   })
 
   it('DialogConfirmPreview', () => {

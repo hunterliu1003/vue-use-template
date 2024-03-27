@@ -1,13 +1,14 @@
-import { h, isRef, unref } from 'vue'
-import type { Component, ComputedRef, InjectionKey, Ref, VNode } from 'vue'
-import type { ComponentEmit, ComponentProps, ComponentSlots } from 'vue-component-type-helpers'
-import type { Provider, Template } from './types'
+import { h, toValue, unref } from 'vue'
+import type { Component, InjectionKey, ToRefs, VNode } from 'vue'
+import type { ComponentSlots } from 'vue-component-type-helpers'
+import type { MaybeRefOrComputedRef, Provider, Template } from './types'
 
 export const providerSymbol = Symbol(import.meta.env.DEV ? 'provider' : '') as InjectionKey<Provider>
 
-export function isTemplate<T extends Component>(value: unknown): value is Template<T> {
-  if (typeof value === 'object' && value !== null)
-    return 'component' in value
+export function isTemplate<T extends Component>(template: unknown): template is Template<T> {
+  const _template = toValue(template)
+  if (typeof _template === 'object' && _template !== null)
+    return 'component' in _template
   else
     return false
 }
@@ -15,12 +16,13 @@ export function isTemplate<T extends Component>(value: unknown): value is Templa
 /**
  * Create a vNode by passing `Template`.
  */
-export function templateToVNodeFn<T extends Component>(template: Template<T>): () => VNode {
+export function templateToVNodeFn<T extends Component>(template: MaybeRefOrComputedRef<Template<T>> | ToRefs<Template<T>>): () => VNode {
   const key = Symbol(import.meta.env.DEV ? 'vNodeFnKey' : '')
   return () => {
-    const attrs = mergeTemplateAttrs(template)
+    const _template = unref(template)
+    const attrs = mergeTemplateAttrs(_template)
     Object.assign(attrs, { key })
-    return h(template.component, attrs, getSlots(template.slots))
+    return h(unref(_template.component), attrs, getSlots(unref(_template.slots)))
   }
 }
 
@@ -40,16 +42,12 @@ function getSlots<T extends Component>(slots?: {
   }, {})
 }
 
-export function mergeTemplateAttrs<T extends Component>(template: Template<T>) {
+export function mergeTemplateAttrs<T extends Component>(template: Template<T> | ToRefs<Template<T>>) {
   return {
-    ...getAttrsFromByTemplate(template?.attrs),
-    ...getAttrsFromByTemplate(template?.props),
-    ...getAttrsFromByTemplate(template?.emits),
+    ...unref(template?.attrs),
+    ...unref(template?.props),
+    ...unref(template?.emits),
   }
-}
-
-function getAttrsFromByTemplate<T extends Component>(attrsOrPropsOrEmits?: ComponentProps<T> | Ref<ComponentProps<T>> | ComputedRef<ComponentProps<T>> | ComponentEmit<T>) {
-  return isRef(attrsOrPropsOrEmits) ? unref(attrsOrPropsOrEmits) : attrsOrPropsOrEmits
 }
 
 type Entries<T> = { [K in keyof T]: [K, T[K]] }[keyof T][]

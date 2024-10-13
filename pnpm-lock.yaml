@@ -69,8 +69,8 @@ importers:
   examples/nuxt3:
     dependencies:
       vue-use-template:
-        specifier: 0.0.3
-        version: 0.0.3(@vueuse/core@10.9.0(vue@3.5.12(typescript@5.6.3)))(vue-component-type-helpers@2.1.6)(vue@3.5.12(typescript@5.6.3))
+        specifier: 0.0.4
+        version: 0.0.4(@vueuse/core@10.9.0(vue@3.5.12(typescript@5.6.3)))(vue-component-type-helpers@2.1.6)(vue@3.5.12(typescript@5.6.3))
     devDependencies:
       '@nuxt-themes/docus':
         specifier: ^1.15.0
@@ -88,8 +88,8 @@ importers:
         specifier: 3.3.7
         version: 3.3.7(typescript@5.3.3)
       vue-use-template:
-        specifier: 0.0.3
-        version: 0.0.3(@vueuse/core@10.9.0(vue@3.3.7(typescript@5.3.3)))(vue-component-type-helpers@2.1.6)(vue@3.3.7(typescript@5.3.3))
+        specifier: 0.0.4
+        version: 0.0.4(@vueuse/core@10.9.0(vue@3.3.7(typescript@5.3.3)))(vue-component-type-helpers@2.1.6)(vue@3.3.7(typescript@5.3.3))
     devDependencies:
       '@vitejs/plugin-vue':
         specifier: ^4.5.0
@@ -7457,12 +7457,12 @@ packages:
     peerDependencies:
       typescript: '>=5.0.0'
 
-  vue-use-template@0.0.3:
-    resolution: {integrity: sha512-WDraRCpVmwymPXsRQGNSGNMzixUElhGvJQYRHP/zPnl3vqKIa/dWbxoEiti90p6CmkCDp3/0gYwuI7EdZTJ0tQ==}
+  vue-use-template@0.0.4:
+    resolution: {integrity: sha512-4445p2JTZFwao7S5qaHYtKj6W+jwIPd4BdDvVMcrcMEl1pyM6O2Q5Y44uMUTQrZdsdqrcd7DM8MpvfxT3TSN5Q==}
     peerDependencies:
       '@vueuse/core': ^10.7.2
       vue: '>=3.0.0'
-      vue-component-type-helpers: '>=1.8.27'
+      vue-component-type-helpers: '>=2.1.6'
 
   vue@3.3.7:
     resolution: {integrity: sha512-YEMDia1ZTv1TeBbnu6VybatmSteGOS3A3YgfINOfraCbf85wdKHzscD6HSS/vB4GAtI7sa1XPX7HcQaJ1l24zA==}
@@ -16503,13 +16503,13 @@ snapshots:
       semver: 7.6.0
       typescript: 5.6.3
 
-  vue-use-template@0.0.3(@vueuse/core@10.9.0(vue@3.3.7(typescript@5.3.3)))(vue-component-type-helpers@2.1.6)(vue@3.3.7(typescript@5.3.3)):
+  vue-use-template@0.0.4(@vueuse/core@10.9.0(vue@3.3.7(typescript@5.3.3)))(vue-component-type-helpers@2.1.6)(vue@3.3.7(typescript@5.3.3)):
     dependencies:
       '@vueuse/core': 10.9.0(vue@3.3.7(typescript@5.3.3))
       vue: 3.3.7(typescript@5.3.3)
       vue-component-type-helpers: 2.1.6
 
-  vue-use-template@0.0.3(@vueuse/core@10.9.0(vue@3.5.12(typescript@5.6.3)))(vue-component-type-helpers@2.1.6)(vue@3.5.12(typescript@5.6.3)):
+  vue-use-template@0.0.4(@vueuse/core@10.9.0(vue@3.5.12(typescript@5.6.3)))(vue-component-type-helpers@2.1.6)(vue@3.5.12(typescript@5.6.3)):
     dependencies:
       '@vueuse/core': 10.9.0(vue@3.5.12(typescript@5.6.3))
       vue: 3.5.12(typescript@5.6.3)

@@ -1,9 +1,7 @@
 import { h, toValue, unref } from 'vue'
-import type { Component, InjectionKey, VNode } from 'vue'
+import type { Component, MaybeRefOrGetter, VNode } from 'vue'
 import type { ComponentSlots } from 'vue-component-type-helpers'
-import type { MaybeRefOrComputedRef, Provider, Template } from './types'
-
-export const providerSymbol = Symbol(import.meta.env.DEV ? 'provider' : '') as InjectionKey<Provider>
+import type { Template } from './types'
 
 export function isTemplate<T extends Component>(template: unknown): template is Template<T> {
   const _template = toValue(template)
@@ -14,12 +12,19 @@ export function isTemplate<T extends Component>(template: unknown): template is 
 }
 
 /**
+ * A type helper to define a template
+ */
+export function defineTemplate<T extends Component>(template: Template<T>) {
+  return template
+}
+
+/**
  * Create a vNode by passing `Template`.
  */
-export function templateToVNodeFn<T extends Component>(template: MaybeRefOrComputedRef<Template<T>>): () => VNode {
-  const key = Symbol(import.meta.env.DEV ? 'vNodeFnKey' : '')
+export function templateToVNodeFn<T extends Component>(template: MaybeRefOrGetter<Template<T>>): () => VNode {
+  const key = Symbol('vNodeFnKey')
   return () => {
-    const _template = unref(template)
+    const _template = unref(toValue(template))
     const attrs = mergeTemplateAttrs(_template)
     Object.assign(attrs, { key })
     return h(unref(_template.component), attrs, getSlots(unref(_template.slots)))
@@ -42,11 +47,11 @@ function getSlots<T extends Component>(slots?: {
   }, {})
 }
 
-export function mergeTemplateAttrs<T extends Component>(template: Template<T>) {
+export function mergeTemplateAttrs<T extends Component>(template: MaybeRefOrGetter<Template<T>>) {
   return {
-    ...unref(template?.attrs),
-    ...unref(template?.props),
-    ...unref(template?.emits),
+    ...unref(toValue(template)?.attrs),
+    ...unref(toValue(template)?.props),
+    ...unref(toValue(template)?.emits),
   }
 }
 

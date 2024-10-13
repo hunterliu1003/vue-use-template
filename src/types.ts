@@ -1,4 +1,4 @@
-import type { Component, ComputedRef, Ref, VNode } from 'vue'
+import type { Component, MaybeRefOrGetter, VNode } from 'vue'
 import type { ComponentProps, ComponentSlots } from 'vue-component-type-helpers'
 
 type PickComponentEmits<T extends object> = {
@@ -8,29 +8,27 @@ type PickComponentProps<T extends object> = {
   [K in keyof T as K extends `on${Capitalize<string>}` ? never : K]: T[K]
 }
 
-export type MaybeRefOrComputedRef<T> = T | Ref<T> | ComputedRef<T>
-
 export interface Template<T extends Component> {
   component: T
-  attrs?: MaybeRefOrComputedRef<ComponentProps<T>>
-  emits?: MaybeRefOrComputedRef<PickComponentEmits<ComponentProps<T>>>
-  props?: MaybeRefOrComputedRef<PickComponentProps<ComponentProps<T>>>
+  attrs?: MaybeRefOrGetter<ComponentProps<T>>
+  emits?: MaybeRefOrGetter<PickComponentEmits<ComponentProps<T>>>
+  props?: MaybeRefOrGetter<PickComponentProps<ComponentProps<T>>>
   slots?: {
     [K in keyof ComponentSlots<T>]?: string | Component | Template<Component>
   }
 }
 
 export interface Provider {
-  vNodeFns: (() => VNode)[]
+  vNodeFns: Set<() => VNode>
 }
 
 export type UseTemplate = <T extends Component>(
-  template: MaybeRefOrComputedRef<Template<T>>,
+  template: MaybeRefOrGetter<Template<T>>,
   options?: {
     showByDefault?: boolean
     hideOnUnmounted?: boolean
   }
 ) => {
-  show: () => Promise<void>
-  hide: () => Promise<void>
+  show: () => void
+  hide: () => void
 }

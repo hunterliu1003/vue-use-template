@@ -1,4 +1,6 @@
 /** Types */
+import { createTemplateProvider } from './createTemplateProvider'
+
 export type {
   Provider,
   Template,
@@ -6,16 +8,12 @@ export type {
 } from './types'
 
 export {
-  defineTemplate,
-  useTemplate,
-} from './useTemplate'
-
-export {
-  TemplateProvider,
-} from './templateProvider'
-
-export {
   isTemplate,
   templateToVNodeFn,
   mergeTemplateAttrs,
+  defineTemplate,
 } from './utils'
+
+export { createTemplateProvider }
+
+export const { TemplateProvider, useTemplate } = createTemplateProvider()

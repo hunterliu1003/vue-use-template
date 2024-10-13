@@ -1,5 +1,12 @@
 
 
+## [0.0.4](https://github.com/hunterliu1003/vue-use-template/compare/0.0.3...0.0.4) (2024-10-13)
+
+
+### Features
+
+* createTemplateProvider ([62a5d9a](https://github.com/hunterliu1003/vue-use-template/commit/62a5d9a7bdf8726a759192264ea8d448b9d2d2d6))
+
 ## [0.0.3](https://github.com/hunterliu1003/vue-use-template/compare/0.0.2...0.0.3) (2024-03-27)
 
 

@@ -1,5 +1,17 @@
 
 
+## [0.0.5](https://github.com/hunterliu1003/vue-use-template/compare/0.0.4...0.0.5) (2024-10-14)
+
+
+### Bug Fixes
+
+* prevent using Symbol ([b91e907](https://github.com/hunterliu1003/vue-use-template/commit/b91e907ee51c5ce782acb9005db07f2e9ffe47c3))
+
+
+### Features
+
+* use pinia ([edf9f24](https://github.com/hunterliu1003/vue-use-template/commit/edf9f2475794d6fcaa3a271363e1d8a493d25948))
+
 ## [0.0.4](https://github.com/hunterliu1003/vue-use-template/compare/0.0.3...0.0.4) (2024-10-13)
 
 

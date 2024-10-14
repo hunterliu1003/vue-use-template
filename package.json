@@ -47,6 +47,7 @@
   },
   "peerDependencies": {
     "@vueuse/core": "^10.7.2",
+    "pinia": ">=2.2.4",
     "vue": ">=3.0.0",
     "vue-component-type-helpers": ">=2.1.6"
   },
@@ -60,6 +61,7 @@
     "eslint": "npm:eslint-ts-patch@8.56.0-0",
     "eslint-ts-patch": "8.56.0-0",
     "lint-staged": "^15.2.2",
+    "pinia": "^2.2.4",
     "pnpm": "^9.12.1",
     "release-it": "^17.8.2",
     "simple-git-hooks": "^2.9.0",

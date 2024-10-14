@@ -1,18 +1,35 @@
 import { tryOnUnmounted } from '@vueuse/core'
-import type { Component, MaybeRefOrGetter } from 'vue'
+import type { Component, MaybeRefOrGetter, VNode } from 'vue'
 import { defineComponent, shallowReactive } from 'vue'
-import type { Provider, Template, UseTemplate } from './types'
+import { defineStore } from 'pinia'
+import type { Template, TemplateStore, UseTemplate } from './types'
 import { templateToVNodeFn } from './utils'
+import { pinia } from './pinia'
+
+let i = 0
 
 export function createTemplateProvider() {
-  const provider: Provider = {
-    vNodeFns: shallowReactive(new Set()),
-  }
+  i = i + 1
+  const useTemplateStore = defineStore(`vue-use-template${i}`, {
+    state: (): TemplateStore => ({
+      vNodeFns: shallowReactive(new Set()),
+    }),
+    actions: {
+      add(vNodeFn: () => VNode) {
+        this.vNodeFns.add(vNodeFn)
+      },
+      remove(vNodeFn: () => VNode) {
+        this.vNodeFns.delete(vNodeFn)
+      },
+    },
+  })
+
+  const templateStore = useTemplateStore(pinia)
 
   const TemplateProvider = defineComponent({
     name: 'TemplateProvider',
     setup(_props, { slots }) {
-      return () => [slots.default?.(), [...provider?.vNodeFns].map(vNodeFn => vNodeFn())]
+      return () => [slots.default?.(), [...templateStore.vNodeFns].map(vNodeFn => vNodeFn())]
     },
   })
 
@@ -26,11 +43,11 @@ export function createTemplateProvider() {
     const vNodeFn = templateToVNodeFn(template)
 
     function show() {
-      provider?.vNodeFns.add(vNodeFn)
+      templateStore.add(vNodeFn)
     }
 
     function hide() {
-      provider?.vNodeFns.delete(vNodeFn)
+      templateStore.remove(vNodeFn)
     }
 
     if (options?.showByDefault)
@@ -43,6 +60,7 @@ export function createTemplateProvider() {
   }
 
   return {
+    templateStore,
     TemplateProvider,
     useTemplate,
   }

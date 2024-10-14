@@ -18,7 +18,7 @@ export interface Template<T extends Component> {
   }
 }
 
-export interface Provider {
+export interface TemplateStore {
   vNodeFns: Set<() => VNode>
 }
 

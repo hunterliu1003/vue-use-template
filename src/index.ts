@@ -2,7 +2,7 @@
 import { createTemplateProvider } from './createTemplateProvider'
 
 export type {
-  Provider,
+  TemplateStore as Provider,
   Template,
   UseTemplate,
 } from './types'
@@ -14,6 +14,8 @@ export {
   defineTemplate,
 } from './utils'
 
+export * from './plugin'
+
 export { createTemplateProvider }
 
-export const { TemplateProvider, useTemplate } = createTemplateProvider()
+export const { templateStore, TemplateProvider, useTemplate } = createTemplateProvider()

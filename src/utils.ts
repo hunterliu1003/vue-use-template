@@ -1,4 +1,4 @@
-import { h, toValue, unref, useId } from 'vue'
+import { h, toValue, unref } from 'vue'
 import type { Component, MaybeRefOrGetter, VNode } from 'vue'
 import type { ComponentSlots } from 'vue-component-type-helpers'
 import type { Template } from './types'
@@ -22,7 +22,7 @@ export function defineTemplate<T extends Component>(template: Template<T>) {
  * Create a vNode by passing `Template`.
  */
 export function templateToVNodeFn<T extends Component>(template: MaybeRefOrGetter<Template<T>>): () => VNode {
-  const key = useId()
+  const key = Symbol('key')
   return () => {
     const _template = unref(toValue(template))
     const attrs = mergeTemplateAttrs(_template)

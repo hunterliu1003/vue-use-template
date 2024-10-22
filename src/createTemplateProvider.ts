@@ -1,4 +1,4 @@
-import { tryOnUnmounted } from '@vueuse/core'
+import { tryOnMounted, tryOnUnmounted } from '@vueuse/core'
 import type { Component, MaybeRefOrGetter } from 'vue'
 import { defineComponent, shallowReactive } from 'vue'
 import type { Provider, Template, UseTemplate } from './types'
@@ -26,7 +26,9 @@ export function createTemplateProvider() {
     const vNodeFn = templateToVNodeFn(template)
 
     function show() {
-      provider?.vNodeFns.add(vNodeFn)
+      tryOnMounted(() => {
+        provider?.vNodeFns.add(vNodeFn)
+      })
     }
 
     function hide() {

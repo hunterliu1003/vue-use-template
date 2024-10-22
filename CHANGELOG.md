@@ -1,5 +1,12 @@
 
 
+## [0.0.6](https://github.com/hunterliu1003/vue-use-template/compare/0.0.4...0.0.6) (2024-10-22)
+
+
+### Features
+
+* do not support SSR ([ccf4640](https://github.com/hunterliu1003/vue-use-template/commit/ccf46404be7fd5a3f61830b3156365786d6a052e))
+
 ## [0.0.4](https://github.com/hunterliu1003/vue-use-template/compare/0.0.3...0.0.4) (2024-10-13)
 
 

@@ -71,6 +71,11 @@
     "vue-component-type-helpers": "^2.1.6",
     "vue-tsc": "^2.1.6"
   },
+  "pnpm": {
+    "overrides": {
+      "eslint-ts-patch>eslint": "8.56.0"
+    }
+  },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
   },

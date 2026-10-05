@@ -7,13 +7,17 @@
 
 ## App.vue
 
+`TemplateProvider` renders the templates shown with `useTemplate()`. It usually wraps `<RouterView />` or `<NuxtPage />`.
+
+<!-- source: cypress/components/App.vue -->
 ```vue
 <script setup lang="ts">
-import { TemplateProvider, useTemplate } from 'vue-use-template'
+import { defineAsyncComponent, h, reactive, ref } from 'vue'
+import { TemplateProvider, defineTemplate, useTemplate } from 'vue-use-template'
 
-// Support Ref, Reactive, Computed
+const confirmed = ref(false)
 const props = reactive({
-  title: 'Hello World!'
+  title: 'Hello World!',
 })
 
 const { show, hide } = useTemplate({
@@ -21,7 +25,7 @@ const { show, hide } = useTemplate({
   props,
   emits: {
     onConfirm: () => {
-      alert('Confirm!')
+      confirmed.value = true
       hide()
     },
     onCancel: () => hide(),
@@ -36,17 +40,19 @@ const { show, hide } = useTemplate({
 
 <template>
   <TemplateProvider>
-    <div>App</div>
-    <!-- or -->
-    <RouterView />
-    <!-- or -->
-    <NuxtPage />
+    <button @click="show()">
+      Open dialog
+    </button>
+    <p v-if="confirmed">
+      Confirmed!
+    </p>
   </TemplateProvider>
 </template>
 ```
 
 ## DialogConfirm.vue
 
+<!-- source: cypress/components/DialogConfirm.vue -->
 ```vue
 <script setup lang="ts">
 defineProps<{

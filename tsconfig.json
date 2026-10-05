@@ -11,6 +11,9 @@
     "module": "ESNext",
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "paths": {
+      "vue-use-template": ["./src/index.ts"]
+    },
     "resolveJsonModule": true,
     "types": [
       "vite/client"

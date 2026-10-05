@@ -1,5 +1,13 @@
 
 
+## [0.1.1](https://github.com/hunterliu1003/vue-use-template/compare/0.1.0...0.1.1) (2026-10-05)
+
+
+### Bug Fixes
+
+* apply attrs, props and emits given as a getter ([41f99cb](https://github.com/hunterliu1003/vue-use-template/commit/41f99cbda5c60885bc2fdb1b39e9d3163857e0ba))
+* render functional component slots instead of an empty comment ([a91d8b6](https://github.com/hunterliu1003/vue-use-template/commit/a91d8b65ae15cc2fc97316528dd6da672f8c5efc))
+
 # [0.1.0](https://github.com/hunterliu1003/vue-use-template/compare/0.0.6...0.1.0) (2026-10-05)
 
 

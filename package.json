@@ -35,6 +35,9 @@
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "tsdown --watch",
     "build": "vue-tsc && tsdown",

@@ -11,6 +11,51 @@ function renderRequest(TemplateProvider: Component, page: Component) {
 }
 
 describe('server-side rendering', () => {
+  it('renders a template shown during setup into the server HTML', async () => {
+    const { TemplateProvider, useTemplate } = createTemplateProvider()
+    const Page = defineComponent({
+      setup() {
+        useTemplate({ component: () => h('dialog', 'shown in setup') }, { showByDefault: true })
+        return () => h('p', 'page')
+      },
+    })
+
+    expect(await renderRequest(TemplateProvider, Page)).toContain('<dialog>shown in setup</dialog>')
+  })
+
+  it('renders a template shown by the component that renders TemplateProvider', async () => {
+    const { TemplateProvider, useTemplate } = createTemplateProvider()
+    const App = defineComponent({
+      setup() {
+        useTemplate({ component: () => h('dialog', 'shown by app') }).show()
+        return () => h(TemplateProvider, null, { default: () => h('p', 'page') })
+      },
+    })
+
+    expect(await renderToString(createSSRApp(App))).toContain('<dialog>shown by app</dialog>')
+  })
+
+  it('keeps concurrent renders isolated from each other', async () => {
+    const { TemplateProvider, useTemplate } = createTemplateProvider()
+    const pageShowing = (text: string) => defineComponent({
+      async setup() {
+        useTemplate({ component: () => h('dialog', text) }).show()
+        await new Promise(resolve => setTimeout(resolve))
+        return () => h('p', 'page')
+      },
+    })
+
+    const [first, second] = await Promise.all([
+      renderRequest(TemplateProvider, pageShowing('first request')),
+      renderRequest(TemplateProvider, pageShowing('second request')),
+    ])
+
+    expect(first).toContain('first request')
+    expect(first).not.toContain('second request')
+    expect(second).toContain('second request')
+    expect(second).not.toContain('first request')
+  })
+
   it('does not leak a template shown after an await into the next request', async () => {
     const { TemplateProvider, useTemplate } = createTemplateProvider()
     const AsyncPage = defineComponent({

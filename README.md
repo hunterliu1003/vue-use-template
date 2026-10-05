@@ -72,3 +72,11 @@ const emit = defineEmits<{
   </dialog>
 </template>
 ```
+
+## SSR
+
+Templates shown while components set up (`showByDefault: true`, or `show()` called synchronously in `setup`) are rendered into the server HTML and hydrated on the client without mismatches. Every server render keeps its own templates, so nothing leaks between requests.
+
+Templates shown after an `await` in an async `setup`, or by a component that renders after `<TemplateProvider>` (instead of inside or around it), are rendered on the client only.
+
+On the server, `show()` called outside a component (e.g. in a server plugin) is ignored.

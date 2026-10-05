@@ -1,6 +1,6 @@
-import { isClient, tryOnMounted, tryOnUnmounted } from '@vueuse/core'
+import { isClient, tryOnUnmounted } from '@vueuse/core'
 import type { Component, MaybeRefOrGetter } from 'vue'
-import { defineComponent, getCurrentInstance, shallowReactive, useSSRContext } from 'vue'
+import { defineComponent, getCurrentInstance, h, shallowReactive, useSSRContext } from 'vue'
 import type { Provider, Template, UseTemplate } from './types'
 import { templateToVNodeFn } from './utils'
 
@@ -35,7 +35,9 @@ export function createTemplateProvider() {
     name: 'TemplateProvider',
     setup(_props, { slots }) {
       const provider = resolveProvider()
-      return () => [slots.default?.(), [...(provider?.vNodeFns ?? [])].map(vNodeFn => vNodeFn())]
+      /** A separate component rendered after the slot, so templates shown while the slot sets up are already registered on the server and while hydrating. */
+      const TemplateOutlet = () => [...(provider?.vNodeFns ?? [])].map(vNodeFn => vNodeFn())
+      return () => [slots.default?.(), h(TemplateOutlet)]
     },
   })
 
@@ -50,9 +52,7 @@ export function createTemplateProvider() {
     const vNodeFn = templateToVNodeFn(template)
 
     function show() {
-      tryOnMounted(() => {
-        provider?.vNodeFns.add(vNodeFn)
-      })
+      provider?.vNodeFns.add(vNodeFn)
     }
 
     function hide() {

@@ -1,9 +1,11 @@
-import type { Rollup } from 'vite'
+import type { Rolldown } from 'vite'
 import { fileURLToPath } from 'node:url'
 import { build } from 'vite'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 
 const entry = fileURLToPath(new URL('./index.ts', import.meta.url))
+/** Vite 8 minifies with Oxc, which prints strings in backticks. */
+const providerName = /["'`]TemplateProvider["'`]/
 
 async function bundle(imports: string[], external = ['vue', '@vueuse/core']) {
   /** Vite inlines NODE_ENV, which Vitest sets to `test`; a consumer's production build sees `production`. */
@@ -17,29 +19,37 @@ async function bundle(imports: string[], external = ['vue', '@vueuse/core']) {
     build: {
       write: false,
       minify: true,
-      rollupOptions: {
+      rolldownOptions: {
         input: 'virtual:consumer',
         external,
       },
     },
     plugins: [{
       name: 'consumer',
-      resolveId: id => (id === 'virtual:consumer' ? '\0consumer' : null),
+      enforce: 'pre',
+      resolveId(id) {
+        if (id === 'virtual:consumer')
+          return '\0consumer'
+        /** The published build is one module, where the @__PURE__ annotations decide what bundlers drop; sideEffects: false would let Rolldown skip src/index.ts whole when only its re-exports are used. */
+        if (id === entry)
+          return { id, moduleSideEffects: true }
+        return null
+      },
       load: id => (id === '\0consumer'
         ? `import { ${imports.join(', ')} } from ${JSON.stringify(entry)}\nconsole.log(${imports.join(', ')})`
         : null),
     }],
-  }) as Rollup.RollupOutput
+  }) as Rolldown.RolldownOutput
   return result.output[0].code
 }
 
 describe('tree shaking', () => {
   it('drops the default provider when only the template helpers are imported', async () => {
-    expect(await bundle(['templateToVNodeFn', 'defineTemplate'])).not.toContain('"TemplateProvider"')
+    expect(await bundle(['templateToVNodeFn', 'defineTemplate'])).not.toMatch(providerName)
   })
 
   it('keeps the default provider when it is imported', async () => {
-    expect(await bundle(['TemplateProvider', 'useTemplate'])).toContain('"TemplateProvider"')
+    expect(await bundle(['TemplateProvider', 'useTemplate'])).toMatch(providerName)
   })
 
   it('drops the development warning from production bundles', async () => {

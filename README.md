@@ -3,7 +3,7 @@
 ## Playground
 
 - [Stackblitz for Vue 3](https://stackblitz.com/github/hunterliu1003/vue-use-template/tree/master/examples/vue3)
-- [Stackblitz for Nuxt 3](https://stackblitz.com/github/hunterliu1003/vue-use-template/tree/master/examples/nuxt3)
+- [Stackblitz for Nuxt](https://stackblitz.com/github/hunterliu1003/vue-use-template/tree/master/examples/nuxt)
 
 ## App.vue
 

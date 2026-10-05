@@ -1,4 +1,7 @@
 {
+  "hooks": {
+    "after:bump": "pnpm --filter './examples/**' exec npm pkg set dependencies.vue-use-template=${version} && pnpm install --lockfile-only --config.link-workspace-packages=true"
+  },
   "npm": {
     "publish": false
   },

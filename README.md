@@ -95,7 +95,7 @@ const emit = defineEmits<{
 
 ### `TemplateProvider`
 
-A component that renders its default slot, then every shown template in the order they were shown. Every `TemplateProvider` renders all templates shown with `useTemplate()`, so render it once.
+A component that renders its default slot, then every shown template in the order they were shown. Every `TemplateProvider` renders all templates shown with `useTemplate()`, so render it once. In an app that installed a template state (see [`createTemplateProvider()`](#createtemplateprovider)), it renders that state's templates instead.
 
 ### `useTemplate(template, options?)`
 
@@ -108,17 +108,40 @@ Returns `{ show, hide }`: `show()` renders `template` in `TemplateProvider` and 
 - `showByDefault` (default `false`): show the template right away.
 - `hideOnUnmounted` (default `true`): hide the template when the component that called `useTemplate()` unmounts.
 
-Call `useTemplate()` in `setup()` or `<script setup>`, or on the client outside any component, for example in a store (`hideOnUnmounted` then has no effect). On the server, call it in `setup()` (see [SSR](#ssr)).
+Call `useTemplate()` in `setup()` or `<script setup>`, or on the client outside any component, for example in a store (`hideOnUnmounted` then has no effect). Outside a component it uses the template state installed last, if any. On the server, call it in `setup()`, or wrap the render in [`runWithApp()`](#runwithappapp-fn) (see [SSR](#ssr)).
 
 ### `createTemplateProvider()`
 
-Returns a new `{ TemplateProvider, useTemplate }` pair with its own set of shown templates: its `TemplateProvider` renders only the templates shown with its `useTemplate()`. The `TemplateProvider` and `useTemplate` exported by the package are such a pair. Create one to render a group of templates in another place, to keep a library's templates apart from the app's, or to start each test with nothing shown.
+Returns a new `{ TemplateProvider, useTemplate, install }` set with its own shown templates: its `TemplateProvider` renders only the templates shown with its `useTemplate()`. Create one to render a group of templates in another place, to keep a library's templates apart from the app's, or to start each test with nothing shown.
 
 ```ts
 import { createTemplateProvider } from 'vue-use-template'
 
 export const { TemplateProvider: ToastProvider, useTemplate: useToast } = createTemplateProvider()
 ```
+
+It is also a Vue plugin. `app.use(createTemplateProvider())` gives that app its own templates: the package's `TemplateProvider` and `useTemplate()` resolve to it inside that app, and on the client `useTemplate()` called outside any component resolves to the state installed last. Install one per app to keep several apps on one page apart.
+
+### `runWithApp(app, fn)`
+
+Imported from `vue-use-template/server`. Runs `fn` with `app` as the current app of its async call chain (an `AsyncLocalStorage`), so `useTemplate()` called outside any component during that call, even after an `await`, resolves to this request:
+
+```ts
+import { runWithApp } from 'vue-use-template/server'
+
+const html = await runWithApp(app, () => renderToString(app))
+```
+
+### Building blocks for libraries
+
+The pieces `TemplateProvider` and `useTemplate()` are made of, for libraries that place the outlet themselves or resolve their own instances:
+
+- `createTemplateState()`: a set of shown templates, kept apart per server render, with `install(app)` and `resolveProvider()`.
+- `createUseTemplate(state)`: a `useTemplate()` bound to `state`.
+- `createTemplateOutlet(state)`: a component that renders the templates of `state`, wherever it is placed.
+- `createProvider()`: an empty `Provider`.
+- `createInstanceResolver(key)`: returns `{ resolve(explicit?), setActive(instance) }`. `resolve()` returns `explicit` if given, then the instance injected with `key` (in `setup()` or `app.runWithContext()`), then the one provided to the app of [`runWithApp()`](#runwithappapp-fn), then, on the client only, the active instance. On the server it never falls back to the active instance, which every concurrent request shares.
+- `setScopedAppResolver(resolver)`: tells every resolver which app the current request belongs to. `runWithApp()` sets it up; call it yourself to plug in another per-request context, for example a framework's own async context.
 
 ### `Template`
 
@@ -155,7 +178,9 @@ A type guard for `Template`: `true` for an object with a `component` key, also w
 
 - `Template<T>`: a template for component `T` (see [`Template`](#template)).
 - `UseTemplate`: the type of `useTemplate()`, including the one `createTemplateProvider()` returns.
-- `Provider`: `{ vNodeFns: Set<() => VNode> }`, the state a `TemplateProvider` renders, with one VNode function per shown template. No other export takes or returns it.
+- `Provider`: `{ vNodeFns: Set<() => VNode> }`, the shown templates a `TemplateProvider` renders in one place, with one VNode function per shown template.
+- `TemplateState`: what `createTemplateState()` returns.
+- `InstanceResolver<T>`: what `createInstanceResolver()` returns.
 
 ## String slots
 
@@ -176,4 +201,4 @@ Templates shown while components set up (`showByDefault: true`, or `show()` call
 
 Templates shown after an `await` in an async `setup`, or by a component that renders after `<TemplateProvider>` (instead of inside or around it), are rendered on the client only.
 
-On the server, `show()` from a `useTemplate()` called outside a component (for example in a server plugin) is ignored and, outside production, logs a warning.
+On the server, `useTemplate()` called outside a component (for example after an `await`, or in a store) can only tell which request it belongs to inside [`runWithApp()`](#runwithappapp-fn). A template it shows there is rendered into that request's HTML when it is shown before `<TemplateProvider>` renders. Without `runWithApp()`, `show()` is ignored and, outside production, logs a warning: concurrent requests share every module-level variable, so guessing the request could render one user's template into another user's page.

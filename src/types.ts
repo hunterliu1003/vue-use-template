@@ -1,4 +1,4 @@
-import type { Component, MaybeRefOrGetter, VNode } from 'vue'
+import type { App, Component, MaybeRefOrGetter, VNode } from 'vue'
 import type { ComponentProps, ComponentSlots } from 'vue-component-type-helpers'
 
 type PickComponentEmits<T extends object> = {
@@ -21,6 +21,12 @@ export interface Template<T extends Component> {
 
 export interface Provider {
   vNodeFns: Set<() => VNode>
+}
+
+export interface TemplateState {
+  /** Provide this state to `app` and make it the active state, so `useTemplate()` resolves to it outside setup on the client. */
+  install: (app: App) => void
+  resolveProvider: () => Provider | undefined
 }
 
 export type UseTemplate = <T extends Component>(

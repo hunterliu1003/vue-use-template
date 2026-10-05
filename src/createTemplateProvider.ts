@@ -1,6 +1,6 @@
 import type { Component, MaybeRefOrGetter } from 'vue'
 import type { Provider, Template, UseTemplate } from './types'
-import { defineComponent, getCurrentInstance, h, inject, onUnmounted, shallowReactive, ssrContextKey } from 'vue'
+import { defineComponent, getCurrentInstance, h, inject, onUnmounted, shallowReactive, ssrContextKey, warn } from 'vue'
 import { templateToVNodeFn } from './utils'
 
 const isClient = typeof window !== 'undefined' && typeof document !== 'undefined'
@@ -59,10 +59,10 @@ export function createUseTemplate({ resolveProvider }: TemplateState): UseTempla
     const vNodeFn = templateToVNodeFn(template)
 
     function show() {
-      provider?.vNodeFns.add(vNodeFn)
-      // eslint-disable-next-line node/prefer-global/process -- bundlers only replace the global process.env.NODE_ENV
-      if (!provider && process.env.NODE_ENV !== 'production')
-        console.warn('[vue-use-template] show() is ignored: useTemplate() was called outside a component on the server.')
+      if (provider)
+        provider.vNodeFns.add(vNodeFn)
+      else
+        warn('vue-use-template: show() is ignored because useTemplate() was called outside a component on the server.')
     }
 
     function hide() {

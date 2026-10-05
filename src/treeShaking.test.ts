@@ -5,7 +5,7 @@ import { describe, expect, it, onTestFinished, vi } from 'vitest'
 
 const entry = fileURLToPath(new URL('./index.ts', import.meta.url))
 
-async function bundle(imports: string[]) {
+async function bundle(imports: string[], external = ['vue', '@vueuse/core']) {
   /** Vite inlines NODE_ENV, which Vitest sets to `test`; a consumer's production build sees `production`. */
   vi.stubEnv('NODE_ENV', 'production')
   onTestFinished(() => {
@@ -19,7 +19,7 @@ async function bundle(imports: string[]) {
       minify: true,
       rollupOptions: {
         input: 'virtual:consumer',
-        external: ['vue', '@vueuse/core'],
+        external,
       },
     },
     plugins: [{
@@ -43,7 +43,8 @@ describe('tree shaking', () => {
   })
 
   it('drops the development warning from production bundles', async () => {
-    expect(await bundle(['useTemplate'])).not.toContain('[vue-use-template]')
+    /** Vue's production warn() does nothing, which the bundler can only see when Vue is bundled too. */
+    expect(await bundle(['useTemplate'], [])).not.toContain('show() is ignored')
   })
 
   it('does not import @vueuse/core', async () => {

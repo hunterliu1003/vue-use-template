@@ -1,6 +1,6 @@
 {
-  "github": {
-    "release": true
+  "npm": {
+    "publish": false
   },
   "git": {
     "requireCleanWorkingDir": false

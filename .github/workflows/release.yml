@@ -5,17 +5,16 @@ on:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+*'
 
-permissions:
-  contents: read
-  id-token: write
-
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v5
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
       - uses: actions/setup-node@v5
         with:
@@ -35,3 +34,18 @@ jobs:
       - run: pnpm test:unit
 
       - run: npm publish
+
+  github-release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Extract this version's notes from CHANGELOG.md
+        run: awk -v version="[$GITHUB_REF_NAME]" '/^#+ \[/ { if (found) exit; if (index($0, version)) { found = 1; next } } found' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
+
+      - run: gh release create "$GITHUB_REF_NAME" --title "Release $GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/notes.md" --verify-tag
+        env:
+          GH_TOKEN: ${{ github.token }}

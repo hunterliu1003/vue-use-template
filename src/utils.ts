@@ -52,10 +52,11 @@ function getSlots<T extends Component>(slots?: {
 }
 
 export function mergeTemplateAttrs<T extends Component>(template: MaybeRefOrGetter<Template<T>>) {
+  const _template = toValue(template)
   return {
-    ...unref(toValue(template)?.attrs),
-    ...unref(toValue(template)?.props),
-    ...unref(toValue(template)?.emits),
+    ...toValue(_template?.attrs),
+    ...toValue(_template?.props),
+    ...toValue(_template?.emits),
   }
 }
 

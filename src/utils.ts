@@ -4,7 +4,7 @@ import type { ComponentSlots } from 'vue-component-type-helpers'
 import type { Template } from './types'
 
 export function isTemplate<T extends Component>(template: unknown): template is Template<T> {
-  const _template = toValue(template)
+  const _template = unref(template)
   if (typeof _template === 'object' && _template !== null)
     return 'component' in _template
   else
@@ -42,8 +42,7 @@ function getSlots<T extends Component>(slots?: {
     const slot = cur[1] as string | Component | Template<Component>
     if (typeof slot === 'string')
       acc[slotName] = () => h('div', { innerHTML: slot })
-    /** `isTemplate` calls a function to read its value, which would run a functional component here. */
-    else if (typeof slot !== 'function' && isTemplate(slot))
+    else if (isTemplate(slot))
       acc[slotName] = () => h(slot.component, mergeTemplateAttrs(slot), slot.slots ? getSlots(slot.slots) : undefined)
     else
       acc[slotName] = () => h(slot)

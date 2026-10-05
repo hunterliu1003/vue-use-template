@@ -43,10 +43,7 @@ export function createTemplateProvider() {
 
   const useTemplate: UseTemplate = <T extends Component>(
     template: MaybeRefOrGetter<Template<T>>,
-    options: Parameters<UseTemplate>[1] = {
-      showByDefault: false,
-      hideOnUnmounted: true,
-    },
+    { showByDefault = false, hideOnUnmounted = true }: Parameters<UseTemplate>[1] = {},
   ): ReturnType<UseTemplate> => {
     const provider = resolveProvider()
     const vNodeFn = templateToVNodeFn(template)
@@ -59,10 +56,10 @@ export function createTemplateProvider() {
       provider?.vNodeFns.delete(vNodeFn)
     }
 
-    if (options?.showByDefault)
+    if (showByDefault)
       show()
 
-    if (options?.hideOnUnmounted)
+    if (hideOnUnmounted)
       tryOnUnmounted(hide)
 
     return { show, hide }

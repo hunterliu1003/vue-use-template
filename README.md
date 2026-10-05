@@ -1,7 +1,5 @@
 # vue-use-template
 
-Show a component, such as a dialog, from anywhere in a Vue 3 app: describe it with `useTemplate()`, and `TemplateProvider` renders it.
-
 ## Playground
 
 - [Stackblitz for Vue 3](https://stackblitz.com/github/hunterliu1003/vue-use-template/tree/master/examples/vue3)

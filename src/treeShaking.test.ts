@@ -1,5 +1,6 @@
 import type { Rolldown } from 'vite'
 import { fileURLToPath } from 'node:url'
+import { runInNewContext } from 'node:vm'
 import { build } from 'vite'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 
@@ -7,7 +8,7 @@ const entry = fileURLToPath(new URL('./index.ts', import.meta.url))
 /** Vite 8 minifies with Oxc, which prints strings in backticks. */
 const providerName = /["'`]TemplateProvider["'`]/
 
-async function bundle(imports: string[], external = ['vue', '@vueuse/core']) {
+async function bundle(imports: string[], external = ['vue', '@vueuse/core'], usage = `console.log(${imports.join(', ')})`) {
   /** Vite inlines NODE_ENV, which Vitest sets to `test`; a consumer's production build sees `production`. */
   vi.stubEnv('NODE_ENV', 'production')
   onTestFinished(() => {
@@ -36,7 +37,7 @@ async function bundle(imports: string[], external = ['vue', '@vueuse/core']) {
         return null
       },
       load: id => (id === '\0consumer'
-        ? `import { ${imports.join(', ')} } from ${JSON.stringify(entry)}\nconsole.log(${imports.join(', ')})`
+        ? `import { ${imports.join(', ')} } from ${JSON.stringify(entry)}\n${usage}`
         : null),
     }],
   }) as Rolldown.RolldownOutput
@@ -52,9 +53,13 @@ describe('tree shaking', () => {
     expect(await bundle(['TemplateProvider', 'useTemplate'])).toMatch(providerName)
   })
 
-  it('drops the development warning from production bundles', async () => {
-    /** Vue's production warn() does nothing, which the bundler can only see when Vue is bundled too. */
-    expect(await bundle(['useTemplate'], [])).not.toContain('show() is ignored')
+  it('never logs the development warning from production bundles', async () => {
+    /** Rolldown keeps the call to Vue's production warn() and the warning's text, but that warn() does nothing. */
+    const warn = vi.fn()
+
+    runInNewContext(await bundle(['useTemplate'], [], 'useTemplate({ component: () => null }).show()'), { console: { warn } })
+
+    expect(warn).not.toHaveBeenCalled()
   })
 
   it('does not import @vueuse/core', async () => {

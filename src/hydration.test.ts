@@ -2,20 +2,8 @@
 import type { Component } from 'vue'
 import { createSSRApp, defineAsyncComponent, defineComponent, h, nextTick } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { createTemplateProvider } from './createTemplateProvider'
-
-/** jsdom defines window, so isClient has to be switched by hand to build the server side. */
-const env = vi.hoisted(() => ({ isClient: true }))
-vi.mock('@vueuse/core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@vueuse/core')>()
-  return {
-    ...actual,
-    get isClient() {
-      return env.isClient
-    },
-  }
-})
 
 function createApp(template: Component = () => h('dialog', 'shown in setup')) {
   const { TemplateProvider, useTemplate } = createTemplateProvider()
@@ -30,15 +18,9 @@ function createApp(template: Component = () => h('dialog', 'shown in setup')) {
   })
 }
 
-afterEach(() => {
-  env.isClient = true
-})
-
 describe('hydration', () => {
   it('hydrates a server-rendered template without mismatches', async () => {
-    env.isClient = false
     const html = await renderToString(createApp())
-    env.isClient = true
     const container = document.createElement('div')
     container.innerHTML = html
     const warn = vi.spyOn(console, 'warn')
@@ -54,9 +36,7 @@ describe('hydration', () => {
 
   it('hydrates a server-rendered async component template without mismatches', async () => {
     const AsyncDialog = () => defineAsyncComponent(async () => () => h('dialog', 'async dialog'))
-    env.isClient = false
     const html = await renderToString(createApp(AsyncDialog()))
-    env.isClient = true
     const container = document.createElement('div')
     container.innerHTML = html
     const warn = vi.spyOn(console, 'warn')

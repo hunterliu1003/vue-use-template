@@ -1,6 +1,6 @@
 import { isClient, tryOnUnmounted } from '@vueuse/core'
 import type { Component, MaybeRefOrGetter } from 'vue'
-import { defineComponent, getCurrentInstance, h, shallowReactive, useSSRContext } from 'vue'
+import { defineComponent, getCurrentInstance, h, inject, shallowReactive, ssrContextKey } from 'vue'
 import type { Provider, Template, UseTemplate } from './types'
 import { templateToVNodeFn } from './utils'
 
@@ -16,12 +16,13 @@ export function createTemplateProvider() {
   const serverProviders = new WeakMap<object, Provider>()
 
   function resolveProvider(): Provider | undefined {
-    if (isClient)
-      return clientProvider
+    if (!getCurrentInstance())
+      return isClient ? clientProvider : undefined
 
-    const ssrContext = getCurrentInstance() ? useSSRContext() : undefined
+    /** The SSR context, not `window`, tells a server render apart: some servers polyfill `window`. */
+    const ssrContext = inject(ssrContextKey, null)
     if (!ssrContext)
-      return undefined
+      return clientProvider
 
     let provider = serverProviders.get(ssrContext)
     if (!provider) {

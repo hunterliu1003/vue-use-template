@@ -1,5 +1,25 @@
 
 
+# [0.1.0](https://github.com/hunterliu1003/vue-use-template/compare/0.0.6...0.1.0) (2026-10-05)
+
+
+### Bug Fixes
+
+* keep hideOnUnmounted on by default when only some options are passed ([137e53a](https://github.com/hunterliu1003/vue-use-template/commit/137e53a0fde30b33be77f46bfad78032cdae9fcd))
+* tell server renders apart by SSR context instead of window ([a979e86](https://github.com/hunterliu1003/vue-use-template/commit/a979e864ed25230e93545bc4c7f1d3bb2b175f0d))
+
+
+### Features
+
+* isolate templates per SSR render so they never leak across requests ([bbb7e2f](https://github.com/hunterliu1003/vue-use-template/commit/bbb7e2faa3805d3929b10bbc3ed113ea64edc995))
+* render templates shown during setup into the server HTML ([33fbfa3](https://github.com/hunterliu1003/vue-use-template/commit/33fbfa33561a2771d02561fbacec368cd159d048))
+
+
+### Performance Improvements
+
+* let bundlers drop the default provider when only the template helpers are imported ([2b65fb5](https://github.com/hunterliu1003/vue-use-template/commit/2b65fb523922f38439297a6e9a3437de2100849b))
+* stop re-rendering open templates without slots when another one opens ([2d123d6](https://github.com/hunterliu1003/vue-use-template/commit/2d123d6243cd1479ea63bb5fee1cb685ed73cea1))
+
 ## [0.0.6](https://github.com/hunterliu1003/vue-use-template/compare/0.0.4...0.0.6) (2024-10-22)
 
 

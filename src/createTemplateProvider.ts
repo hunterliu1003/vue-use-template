@@ -1,18 +1,41 @@
-import { tryOnMounted, tryOnUnmounted } from '@vueuse/core'
+import { isClient, tryOnMounted, tryOnUnmounted } from '@vueuse/core'
 import type { Component, MaybeRefOrGetter } from 'vue'
-import { defineComponent, shallowReactive } from 'vue'
+import { defineComponent, getCurrentInstance, shallowReactive, useSSRContext } from 'vue'
 import type { Provider, Template, UseTemplate } from './types'
 import { templateToVNodeFn } from './utils'
 
-export function createTemplateProvider() {
-  const provider: Provider = {
+function createProvider(): Provider {
+  return {
     vNodeFns: shallowReactive(new Set()),
+  }
+}
+
+export function createTemplateProvider() {
+  const clientProvider = createProvider()
+  /** Keyed by SSR context rather than app: every render gets a fresh context, even when an app is reused across requests. */
+  const serverProviders = new WeakMap<object, Provider>()
+
+  function resolveProvider(): Provider | undefined {
+    if (isClient)
+      return clientProvider
+
+    const ssrContext = getCurrentInstance() ? useSSRContext() : undefined
+    if (!ssrContext)
+      return undefined
+
+    let provider = serverProviders.get(ssrContext)
+    if (!provider) {
+      provider = createProvider()
+      serverProviders.set(ssrContext, provider)
+    }
+    return provider
   }
 
   const TemplateProvider = defineComponent({
     name: 'TemplateProvider',
     setup(_props, { slots }) {
-      return () => [slots.default?.(), [...provider?.vNodeFns].map(vNodeFn => vNodeFn())]
+      const provider = resolveProvider()
+      return () => [slots.default?.(), [...(provider?.vNodeFns ?? [])].map(vNodeFn => vNodeFn())]
     },
   })
 
@@ -23,6 +46,7 @@ export function createTemplateProvider() {
       hideOnUnmounted: true,
     },
   ): ReturnType<UseTemplate> => {
+    const provider = resolveProvider()
     const vNodeFn = templateToVNodeFn(template)
 
     function show() {

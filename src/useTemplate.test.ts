@@ -25,3 +25,26 @@ describe('useTemplate options', () => {
     expect(el.innerHTML).not.toContain('owned by child')
   })
 })
+
+describe('rendering open templates', () => {
+  it('does not re-render an open template without slots when another one opens', async () => {
+    const { TemplateProvider, useTemplate } = createTemplateProvider()
+    let renders = 0
+    const Dialog = defineComponent({
+      props: { title: String },
+      setup: props => () => {
+        renders++
+        return h('dialog', props.title)
+      },
+    })
+    createApp({ render: () => h(TemplateProvider) }).mount(document.createElement('div'))
+    useTemplate({ component: Dialog, props: { title: 'already open' } }).show()
+    await nextTick()
+    renders = 0
+
+    useTemplate({ component: () => h('dialog', 'another') }).show()
+    await nextTick()
+
+    expect(renders).toBe(0)
+  })
+})

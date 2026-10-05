@@ -34,7 +34,10 @@ export function templateToVNodeFn<T extends Component>(template: MaybeRefOrGette
 function getSlots<T extends Component>(slots?: {
   [K in keyof ComponentSlots<T>]?: string | Component | Template<Component>
 }) {
-  return objectEntries(slots || {}).reduce<Record<string, () => VNode>>((acc, cur) => {
+  /** An empty slots object still makes Vue force-update the component, so pass none at all. */
+  if (!slots)
+    return undefined
+  return objectEntries(slots as Record<string, string | Component | Template<Component>>).reduce<Record<string, () => VNode>>((acc, cur) => {
     const slotName = cur[0] as string
     const slot = cur[1] as string | Component | Template<Component>
     if (typeof slot === 'string')

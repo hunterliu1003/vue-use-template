@@ -1,5 +1,18 @@
 
 
+# [0.2.0](https://github.com/hunterliu1003/vue-use-template/compare/0.1.1...0.2.0) (2026-10-05)
+
+
+### Bug Fixes
+
+* do not call a function passed to isTemplate ([677d64d](https://github.com/hunterliu1003/vue-use-template/commit/677d64d0df0113f072076477ae8b74402139796e))
+* raise the vue peer range to >=3.3.0 ([d588ada](https://github.com/hunterliu1003/vue-use-template/commit/d588ada79a9cc4446f5fe666ceb5e71188dedd16))
+
+
+### Features
+
+* warn in development when show() is ignored on the server ([65c8be4](https://github.com/hunterliu1003/vue-use-template/commit/65c8be4126f5028c97bf3678d5e3d4ed0ec966c9))
+
 ## [0.1.1](https://github.com/hunterliu1003/vue-use-template/compare/0.1.0...0.1.1) (2026-10-05)
 
 

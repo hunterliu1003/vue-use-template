@@ -60,6 +60,9 @@ export function createUseTemplate({ resolveProvider }: TemplateState): UseTempla
 
     function show() {
       provider?.vNodeFns.add(vNodeFn)
+      // eslint-disable-next-line node/prefer-global/process -- bundlers only replace the global process.env.NODE_ENV
+      if (process.env.NODE_ENV !== 'production' && !provider)
+        console.warn('[vue-use-template] show() is ignored: useTemplate() was called outside a component on the server.')
     }
 
     function hide() {

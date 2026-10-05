@@ -1,11 +1,16 @@
 import { fileURLToPath } from 'node:url'
 import type { Rollup } from 'vite'
 import { build } from 'vite'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, onTestFinished, vi } from 'vitest'
 
 const entry = fileURLToPath(new URL('./index.ts', import.meta.url))
 
 async function bundle(imports: string[]) {
+  /** Vite inlines NODE_ENV, which Vitest sets to `test`; a consumer's production build sees `production`. */
+  vi.stubEnv('NODE_ENV', 'production')
+  onTestFinished(() => {
+    vi.unstubAllEnvs()
+  })
   const result = await build({
     configFile: false,
     logLevel: 'silent',
@@ -35,6 +40,10 @@ describe('tree shaking', () => {
 
   it('keeps the default provider when it is imported', async () => {
     expect(await bundle(['TemplateProvider', 'useTemplate'])).toContain('"TemplateProvider"')
+  })
+
+  it('drops the development warning from production bundles', async () => {
+    expect(await bundle(['useTemplate'])).not.toContain('[vue-use-template]')
   })
 
   it('does not import @vueuse/core', async () => {

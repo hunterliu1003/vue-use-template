@@ -96,11 +96,29 @@ describe('server-side rendering', () => {
     expect(warn.mock.calls.every(([message]) => String(message).includes('Symbol(v-scx)'))).toBe(true)
   })
 
-  it('ignores show() called outside any component on the server', async () => {
+  it('ignores show() called outside any component on the server, with a warning', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    onTestFinished(() => warn.mockRestore())
     const { TemplateProvider, useTemplate } = createTemplateProvider()
 
     useTemplate({ component: () => h('dialog', 'leaked') }).show()
 
     expect(await renderRequest(TemplateProvider, () => h('p', 'page'))).not.toContain('leaked')
+    expect(warn).toHaveBeenCalledOnce()
+    expect(warn.mock.calls[0][0]).toContain('outside a component on the server')
+  })
+
+  it('does not warn about an ignored show() in production', () => {
+    vi.stubEnv('NODE_ENV', 'production')
+    onTestFinished(() => {
+      vi.unstubAllEnvs()
+    })
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    onTestFinished(() => warn.mockRestore())
+    const { useTemplate } = createTemplateProvider()
+
+    useTemplate({ component: () => h('dialog') }).show()
+
+    expect(warn).not.toHaveBeenCalled()
   })
 })

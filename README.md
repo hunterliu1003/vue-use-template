@@ -108,7 +108,7 @@ Returns `{ show, hide }`: `show()` renders `template` in `TemplateProvider` and 
 - `showByDefault` (default `false`): show the template right away.
 - `hideOnUnmounted` (default `true`): hide the template when the component that called `useTemplate()` unmounts.
 
-Call `useTemplate()` in `setup()` or `<script setup>`, or on the client outside any component, for example in a store (`hideOnUnmounted` then has no effect). Outside a component it uses the template state installed last, if any. On the server, call it in `setup()`, or wrap the render in [`runWithApp()`](#runwithappapp-fn) (see [SSR](#ssr)).
+Call `useTemplate()` in `setup()` or `<script setup>`, or on the client outside any component, for example in a store (`hideOnUnmounted` then has no effect). Outside a component it uses the template state installed last, if any. On the server, call it in `setup()` (see [SSR](#ssr)).
 
 ### `createTemplateProvider()`
 
@@ -122,16 +122,6 @@ export const { TemplateProvider: ToastProvider, useTemplate: useToast } = create
 
 It is also a Vue plugin. `app.use(createTemplateProvider())` gives that app its own templates: the package's `TemplateProvider` and `useTemplate()` resolve to it inside that app, and on the client `useTemplate()` called outside any component resolves to the state installed last. Install one per app to keep several apps on one page apart.
 
-### `runWithApp(app, fn)`
-
-Imported from `vue-use-template/server`. Runs `fn` with `app` as the current app of its async call chain (an `AsyncLocalStorage`), so `useTemplate()` called outside any component during that call, even after an `await`, resolves to this request:
-
-```ts
-import { runWithApp } from 'vue-use-template/server'
-
-const html = await runWithApp(app, () => renderToString(app))
-```
-
 ### Building blocks for libraries
 
 The pieces `TemplateProvider` and `useTemplate()` are made of, for libraries that place the outlet themselves or resolve their own instances:
@@ -140,8 +130,7 @@ The pieces `TemplateProvider` and `useTemplate()` are made of, for libraries tha
 - `createUseTemplate(state)`: a `useTemplate()` bound to `state`.
 - `createTemplateOutlet(state)`: a component that renders the templates of `state`, wherever it is placed.
 - `createProvider()`: an empty `Provider`.
-- `createInstanceResolver(key)`: returns `{ resolve(explicit?), setActive(instance) }`. `resolve()` returns `explicit` if given, then the instance injected with `key` (in `setup()` or `app.runWithContext()`), then the one provided to the app of [`runWithApp()`](#runwithappapp-fn), then, on the client only, the active instance. On the server it never falls back to the active instance, which every concurrent request shares.
-- `setScopedAppResolver(resolver)`: tells every resolver which app the current request belongs to. `runWithApp()` sets it up; call it yourself to plug in another per-request context, for example a framework's own async context.
+- `createInstanceResolver(key)`: returns `{ resolve(explicit?), setActive(instance) }`. `resolve()` returns `explicit` if given, then the instance injected with `key` (in `setup()` or `app.runWithContext()`), then, on the client only, the active instance. On the server it never falls back to the active instance, which every concurrent request shares.
 
 ### `Template`
 
@@ -201,4 +190,4 @@ Templates shown while components set up (`showByDefault: true`, or `show()` call
 
 Templates shown after an `await` in an async `setup`, or by a component that renders after `<TemplateProvider>` (instead of inside or around it), are rendered on the client only.
 
-On the server, `useTemplate()` called outside a component (for example after an `await`, or in a store) can only tell which request it belongs to inside [`runWithApp()`](#runwithappapp-fn). A template it shows there is rendered into that request's HTML when it is shown before `<TemplateProvider>` renders. Without `runWithApp()`, `show()` is ignored and, outside production, logs a warning: concurrent requests share every module-level variable, so guessing the request could render one user's template into another user's page.
+On the server, `show()` from a `useTemplate()` called outside a component (for example after an `await`, in a server plugin or in a store) is ignored and, outside production, logs a warning. Concurrent requests share every module-level variable, so guessing the request could render one user's template into another user's page.

@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 
 import type { InjectionKey } from 'vue'
-import { describe, expect, it, onTestFinished } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { createApp, defineComponent, h } from 'vue'
-import { createInstanceResolver, setScopedAppResolver } from './createInstanceResolver'
+import { createInstanceResolver } from './createInstanceResolver'
 
 interface Thing { name: string }
 
@@ -47,18 +47,6 @@ describe('createInstanceResolver in the browser', () => {
     resolver.setActive(active)
 
     expect(resolver.resolve()).toBe(active)
-  })
-
-  it('prefers the scoped app over the active instance', () => {
-    const { key, resolver } = setup()
-    const scoped: Thing = { name: 'scoped' }
-    const app = createApp({ render: () => h('p') })
-    app.provide(key, scoped)
-    resolver.setActive({ name: 'active' })
-    setScopedAppResolver(() => app)
-    onTestFinished(() => setScopedAppResolver(undefined))
-
-    expect(resolver.resolve()).toBe(scoped)
   })
 
   it('prefers an explicitly passed instance over everything', () => {

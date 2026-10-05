@@ -12,7 +12,7 @@ import {
 
 export type { InstanceResolver } from './createInstanceResolver'
 
-export { createInstanceResolver, setScopedAppResolver } from './createInstanceResolver'
+export { createInstanceResolver } from './createInstanceResolver'
 
 export type {
   Provider,

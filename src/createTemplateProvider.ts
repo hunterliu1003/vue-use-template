@@ -1,7 +1,7 @@
 import type { App, Component, InjectionKey, MaybeRefOrGetter } from 'vue'
 import type { Provider, Template, TemplateState, UseTemplate } from './types'
 import { defineComponent, getCurrentInstance, h, hasInjectionContext, inject, onUnmounted, shallowReactive, ssrContextKey, warn } from 'vue'
-import { createInstanceResolver, getScopedApp, isClient, markServerRender } from './createInstanceResolver'
+import { createInstanceResolver, isClient, markServerRender } from './createInstanceResolver'
 import { templateToVNodeFn } from './utils'
 
 const templateStateKey: InjectionKey<TemplateState> = /* @__PURE__ */ Symbol('vue-use-template')
@@ -18,9 +18,7 @@ export function createProvider(): Provider {
 }
 
 function resolveSsrContext(): object | null {
-  if (hasInjectionContext())
-    return inject(ssrContextKey, null)
-  return getScopedApp()?.runWithContext(() => inject(ssrContextKey, null)) ?? null
+  return hasInjectionContext() ? inject(ssrContextKey, null) : null
 }
 
 export function createTemplateState(): TemplateState {
@@ -90,7 +88,7 @@ export function createUseTemplateFrom(getState: () => TemplateState): UseTemplat
       if (provider)
         provider.vNodeFns.add(vNodeFn)
       else
-        warn('vue-use-template: show() is ignored because useTemplate() was called outside a component on the server. Wrap the render in runWithApp() from vue-use-template/server.')
+        warn('vue-use-template: show() is ignored because useTemplate() was called outside a component on the server.')
     }
 
     function hide() {

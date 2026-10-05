@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 import type { Component } from 'vue'
+import type { Template } from './types'
+import { describe, expect, it, vi } from 'vitest'
 import { createApp, createSSRApp, defineComponent, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import { describe, expect, it, vi } from 'vitest'
-import type { Template } from './types'
 import { defineTemplate, templateToVNodeFn } from './utils'
 
 const Dialog = defineComponent({

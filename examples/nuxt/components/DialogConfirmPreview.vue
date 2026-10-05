@@ -13,7 +13,7 @@ const { show, hide } = useTemplate({
   emits: {
     onConfirm: () => {
       props.title = 'Confirmed!'
-      setTimeout(() => hide(), 1000)
+      setTimeout(hide, 1000)
     },
     onCancel: () => hide(),
   },

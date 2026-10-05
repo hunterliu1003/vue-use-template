@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
+
+import { describe, expect, it } from 'vitest'
 import { createSSRApp, defineComponent, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import { describe, expect, it } from 'vitest'
 import { createTemplateProvider } from './createTemplateProvider'
 
 describe('server-side rendering with window defined', () => {

@@ -1,5 +1,5 @@
-import { computed, h, reactive, ref } from 'vue'
 import { describe, expect, it, vi } from 'vitest'
+import { computed, h, reactive, ref } from 'vue'
 import { isTemplate } from './utils'
 
 const template = { component: () => h('p') }

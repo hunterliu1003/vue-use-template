@@ -8,10 +8,10 @@ export type {
 } from './types'
 
 export {
-  isTemplate,
-  templateToVNodeFn,
-  mergeTemplateAttrs,
   defineTemplate,
+  isTemplate,
+  mergeTemplateAttrs,
+  templateToVNodeFn,
 } from './utils'
 
 export { createTemplateProvider }

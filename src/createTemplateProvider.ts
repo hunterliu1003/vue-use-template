@@ -1,6 +1,6 @@
 import type { Component, MaybeRefOrGetter } from 'vue'
-import { defineComponent, getCurrentInstance, h, inject, onUnmounted, shallowReactive, ssrContextKey } from 'vue'
 import type { Provider, Template, UseTemplate } from './types'
+import { defineComponent, getCurrentInstance, h, inject, onUnmounted, shallowReactive, ssrContextKey } from 'vue'
 import { templateToVNodeFn } from './utils'
 
 const isClient = typeof window !== 'undefined' && typeof document !== 'undefined'

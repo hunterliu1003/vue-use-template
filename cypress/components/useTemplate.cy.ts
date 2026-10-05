@@ -1,8 +1,8 @@
 import type { Ref } from 'vue'
-import { defineAsyncComponent, defineComponent, h, markRaw, reactive, ref } from 'vue'
 import type { Template } from '../../src/index'
-import { createTemplateProvider, defineTemplate } from '../../src/index'
 import type DialogConfirm from './DialogConfirm.vue'
+import { defineAsyncComponent, defineComponent, h, markRaw, reactive, ref } from 'vue'
+import { createTemplateProvider, defineTemplate } from '../../src/index'
 
 describe('test useTemplate()', () => {
   it('hello world - basic useTemplate', () => {

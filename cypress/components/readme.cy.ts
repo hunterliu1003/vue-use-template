@@ -1,4 +1,4 @@
-import { Suspense, h } from 'vue'
+import { h, Suspense } from 'vue'
 import App from './App.vue'
 
 describe('README example', () => {

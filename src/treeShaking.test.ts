@@ -1,5 +1,5 @@
-import { fileURLToPath } from 'node:url'
 import type { Rollup } from 'vite'
+import { fileURLToPath } from 'node:url'
 import { build } from 'vite'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 

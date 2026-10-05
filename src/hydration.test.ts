@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 import type { Component } from 'vue'
+import { describe, expect, it, vi } from 'vitest'
 import { createSSRApp, defineAsyncComponent, defineComponent, h, nextTick } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import { describe, expect, it, vi } from 'vitest'
 import { createTemplateProvider } from './createTemplateProvider'
 
 function createApp(template: Component = () => h('dialog', 'shown in setup')) {

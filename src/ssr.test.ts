@@ -1,7 +1,7 @@
 import type { Component } from 'vue'
+import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { createSSRApp, defineComponent, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { createTemplateProvider } from './createTemplateProvider'
 
 function renderRequest(TemplateProvider: Component, page: Component) {

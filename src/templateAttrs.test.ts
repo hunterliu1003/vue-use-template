@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
-import { computed, createApp, defineComponent, h, nextTick, ref } from 'vue'
+
 import { describe, expect, it, vi } from 'vitest'
+import { computed, createApp, defineComponent, h, nextTick, ref } from 'vue'
 import { templateToVNodeFn } from './utils'
 
 const Dialog = defineComponent({

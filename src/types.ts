@@ -28,7 +28,7 @@ export type UseTemplate = <T extends Component>(
   options?: {
     showByDefault?: boolean
     hideOnUnmounted?: boolean
-  }
+  },
 ) => {
   show: () => void
   hide: () => void

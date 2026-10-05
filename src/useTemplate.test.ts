@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
-import { createApp, defineComponent, h, nextTick, ref } from 'vue'
+
 import { describe, expect, it, vi } from 'vitest'
+import { createApp, defineComponent, h, nextTick, ref } from 'vue'
 import { createTemplateProvider } from './createTemplateProvider'
 
 describe('in the browser', () => {

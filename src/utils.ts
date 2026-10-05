@@ -1,7 +1,7 @@
-import { h, toValue, unref } from 'vue'
 import type { Component, MaybeRefOrGetter, VNode } from 'vue'
 import type { ComponentSlots } from 'vue-component-type-helpers'
 import type { Template } from './types'
+import { h, toValue, unref } from 'vue'
 
 export function isTemplate<T extends Component>(template: unknown): template is Template<T> {
   const _template = unref(template)

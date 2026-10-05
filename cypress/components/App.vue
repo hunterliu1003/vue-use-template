@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent, h, reactive, ref } from 'vue'
-import { TemplateProvider, defineTemplate, useTemplate } from 'vue-use-template'
+import { defineTemplate, TemplateProvider, useTemplate } from 'vue-use-template'
 
 const confirmed = ref(false)
 const props = reactive({

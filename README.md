@@ -25,7 +25,7 @@ Render `TemplateProvider` once, around the rest of the app; it usually wraps `<R
 ```vue
 <script setup lang="ts">
 import { defineAsyncComponent, h, reactive, ref } from 'vue'
-import { TemplateProvider, defineTemplate, useTemplate } from 'vue-use-template'
+import { defineTemplate, TemplateProvider, useTemplate } from 'vue-use-template'
 
 const confirmed = ref(false)
 const props = reactive({

@@ -1,7 +1,28 @@
 // @vitest-environment jsdom
 import { createApp, defineComponent, h, nextTick, ref } from 'vue'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { createTemplateProvider } from './createTemplateProvider'
+
+describe('in the browser', () => {
+  it('shows a template without reading process, which only exists when a bundler provides it', () => {
+    const { useTemplate } = createTemplateProvider()
+    const { show } = useTemplate({ component: () => h('dialog') })
+    let error: unknown
+
+    vi.stubGlobal('process', undefined)
+    try {
+      show()
+    }
+    catch (e) {
+      error = e
+    }
+    finally {
+      vi.unstubAllGlobals()
+    }
+
+    expect(error).toBeUndefined()
+  })
+})
 
 describe('useTemplate options', () => {
   it('still hides on unmount when only showByDefault is passed', async () => {

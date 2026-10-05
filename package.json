@@ -46,7 +46,8 @@
     "release": "pnpm build && pnpm test:unit && pnpm cypress:run && release-it",
     "test:unit": "vitest run",
     "cypress:open": "cypress open --browser electron --component",
-    "cypress:run": "cypress run --component"
+    "cypress:run": "cypress run --component",
+    "prepare": "simple-git-hooks"
   },
   "peerDependencies": {
     "vue": ">=3.3.0",

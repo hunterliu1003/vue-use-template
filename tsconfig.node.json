@@ -7,5 +7,5 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true
   },
-  "include": ["tsdown.config.ts", "cypress.config.ts"]
+  "include": ["tsdown.config.ts", "cypress.config.ts", "vitest.config.ts"]
 }

@@ -42,7 +42,8 @@ function getSlots<T extends Component>(slots?: {
     const slot = cur[1] as string | Component | Template<Component>
     if (typeof slot === 'string')
       acc[slotName] = () => h('div', { innerHTML: slot })
-    else if (isTemplate(slot))
+    /** `isTemplate` calls a function to read its value, which would run a functional component here. */
+    else if (typeof slot !== 'function' && isTemplate(slot))
       acc[slotName] = () => h(slot.component, mergeTemplateAttrs(slot), slot.slots ? getSlots(slot.slots) : undefined)
     else
       acc[slotName] = () => h(slot)

@@ -1,6 +1,6 @@
 import antfu from '@antfu/eslint-config'
 
 export default antfu({
-  /** The pnpm rules move settings into pnpm-workspace.yaml, which pnpm 8 (pinned in packageManager) ignores. */
+  /** The pnpm rules would add settings such as shellEmulator and trustPolicy to pnpm-workspace.yaml, changing how pnpm runs scripts and resolves packages. */
   pnpm: false,
 })

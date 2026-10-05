@@ -76,9 +76,9 @@
     }
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
+    "pre-commit": "node_modules/.bin/lint-staged"
   },
   "lint-staged": {
-    "*": "eslint . --fix"
+    "*": "eslint --fix --no-warn-ignored"
   }
 }

@@ -7,5 +7,5 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["tsdown.config.ts", "cypress.config.ts"]
 }

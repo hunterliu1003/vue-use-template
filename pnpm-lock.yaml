@@ -38,9 +38,6 @@ importers:
       lint-staged:
         specifier: ^15.2.2
         version: 15.5.2
-      pnpm:
-        specifier: ^9.12.1
-        version: 9.15.9
       release-it:
         specifier: ^17.8.2
         version: 17.11.0(typescript@5.9.3)
@@ -9941,12 +9938,6 @@ packages:
   /pluralize@8.0.0:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
-    dev: true
-
-  /pnpm@9.15.9:
-    resolution: {integrity: sha512-aARhQYk8ZvrQHAeSMRKOmvuJ74fiaR1p5NQO7iKJiClf1GghgbrlW1hBjDolO95lpQXsfF+UA+zlzDzTfc8lMQ==}
-    engines: {node: '>=18.12'}
-    hasBin: true
     dev: true
 
   /portfinder@1.0.38:

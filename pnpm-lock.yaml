@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^9.5.1
-        version: 9.5.1(@typescript-eslint/typescript-estree@8.59.3)(@typescript-eslint/utils@8.59.3)(@vue/compiler-sfc@3.5.34)(eslint@10.12.0)(typescript@5.9.3)(vitest@3.2.7)
+        version: 9.5.1(@typescript-eslint/typescript-estree@8.71.0)(@typescript-eslint/utils@8.71.0)(@vue/compiler-sfc@3.5.34)(eslint@10.12.0)(typescript@5.9.3)(vitest@3.2.7)
       '@release-it/conventional-changelog':
         specifier: ^8.0.1
         version: 8.0.2(release-it@17.11.0)
@@ -111,7 +111,7 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /@antfu/eslint-config@9.5.1(@typescript-eslint/typescript-estree@8.59.3)(@typescript-eslint/utils@8.59.3)(@vue/compiler-sfc@3.5.34)(eslint@10.12.0)(typescript@5.9.3)(vitest@3.2.7):
+  /@antfu/eslint-config@9.5.1(@typescript-eslint/typescript-estree@8.71.0)(@typescript-eslint/utils@8.71.0)(@vue/compiler-sfc@3.5.34)(eslint@10.12.0)(typescript@5.9.3)(vitest@3.2.7):
     resolution: {integrity: sha512-BoQGe5lY9spYmGqtUOC6hWohxob4SNn+7o5nHsOXoLn+9vJqNGqC/2/vRoXbcOa3dT4Rx/ZV/Qkr6uf72KTbxQ==}
     hasBin: true
     peerDependencies:
@@ -197,7 +197,7 @@ packages:
       eslint-flat-config-utils: 3.2.0
       eslint-merge-processors: 2.0.0(eslint@10.12.0)
       eslint-plugin-antfu: 3.2.3(eslint@10.12.0)
-      eslint-plugin-command: 4.0.0(@typescript-eslint/typescript-estree@8.59.3)(@typescript-eslint/utils@8.59.3)(eslint@10.12.0)
+      eslint-plugin-command: 4.0.0(@typescript-eslint/typescript-estree@8.71.0)(@typescript-eslint/utils@8.71.0)(eslint@10.12.0)
       eslint-plugin-import-lite: 0.6.0(eslint@10.12.0)
       eslint-plugin-jsdoc: 64.5.4(eslint@10.12.0)(typescript@5.9.3)
       eslint-plugin-jsonc: 3.4.2(eslint@10.12.0)
@@ -6668,7 +6668,7 @@ packages:
       eslint: 10.12.0(jiti@2.7.0)
     dev: true
 
-  /eslint-plugin-command@4.0.0(@typescript-eslint/typescript-estree@8.59.3)(@typescript-eslint/utils@8.59.3)(eslint@10.12.0):
+  /eslint-plugin-command@4.0.0(@typescript-eslint/typescript-estree@8.71.0)(@typescript-eslint/utils@8.71.0)(eslint@10.12.0):
     resolution: {integrity: sha512-mM1UdKu39YF5nUBVbA+PaVvpB3R3Niwjes8CQ8rJTTbgIThgrfQILgDqmtpAAQL1xGaolCoES1SfiwzwPVGkXQ==}
     engines: {node: ^22.22.2 || >=24.15.0}
     peerDependencies:
@@ -6677,8 +6677,8 @@ packages:
       eslint: '*'
     dependencies:
       '@es-joy/jsdoccomment': 0.92.0
-      '@typescript-eslint/typescript-estree': 8.59.3(typescript@5.9.3)
-      '@typescript-eslint/utils': 8.59.3(eslint@10.12.0)(typescript@5.9.3)
+      '@typescript-eslint/typescript-estree': 8.71.0(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.71.0(eslint@10.12.0)(typescript@5.9.3)
       eslint: 10.12.0(jiti@2.7.0)
     dev: true
 

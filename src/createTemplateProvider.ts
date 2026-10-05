@@ -10,7 +10,7 @@ function createProvider(): Provider {
   }
 }
 
-export function createTemplateProvider() {
+export function createTemplateState() {
   const clientProvider = createProvider()
   /** Keyed by SSR context rather than app: every render gets a fresh context, even when an app is reused across requests. */
   const serverProviders = new WeakMap<object, Provider>()
@@ -32,7 +32,13 @@ export function createTemplateProvider() {
     return provider
   }
 
-  const TemplateProvider = defineComponent({
+  return { resolveProvider }
+}
+
+type TemplateState = ReturnType<typeof createTemplateState>
+
+export function createTemplateProviderComponent({ resolveProvider }: TemplateState) {
+  return defineComponent({
     name: 'TemplateProvider',
     setup(_props, { slots }) {
       const provider = resolveProvider()
@@ -41,8 +47,10 @@ export function createTemplateProvider() {
       return () => [slots.default?.(), h(TemplateOutlet)]
     },
   })
+}
 
-  const useTemplate: UseTemplate = <T extends Component>(
+export function createUseTemplate({ resolveProvider }: TemplateState): UseTemplate {
+  return <T extends Component>(
     template: MaybeRefOrGetter<Template<T>>,
     { showByDefault = false, hideOnUnmounted = true }: Parameters<UseTemplate>[1] = {},
   ): ReturnType<UseTemplate> => {
@@ -65,9 +73,12 @@ export function createTemplateProvider() {
 
     return { show, hide }
   }
+}
 
+export function createTemplateProvider() {
+  const state = createTemplateState()
   return {
-    TemplateProvider,
-    useTemplate,
+    TemplateProvider: createTemplateProviderComponent(state),
+    useTemplate: createUseTemplate(state),
   }
 }

@@ -36,4 +36,8 @@ describe('tree shaking', () => {
   it('keeps the default provider when it is imported', async () => {
     expect(await bundle(['TemplateProvider', 'useTemplate'])).toContain('"TemplateProvider"')
   })
+
+  it('does not import @vueuse/core', async () => {
+    expect(await bundle(['TemplateProvider', 'useTemplate', 'createTemplateProvider'])).not.toContain('@vueuse/core')
+  })
 })

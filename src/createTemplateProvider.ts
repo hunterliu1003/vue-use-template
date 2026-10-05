@@ -1,8 +1,9 @@
-import { isClient, tryOnUnmounted } from '@vueuse/core'
 import type { Component, MaybeRefOrGetter } from 'vue'
-import { defineComponent, getCurrentInstance, h, inject, shallowReactive, ssrContextKey } from 'vue'
+import { defineComponent, getCurrentInstance, h, inject, onUnmounted, shallowReactive, ssrContextKey } from 'vue'
 import type { Provider, Template, UseTemplate } from './types'
 import { templateToVNodeFn } from './utils'
+
+const isClient = typeof window !== 'undefined' && typeof document !== 'undefined'
 
 function createProvider(): Provider {
   return {
@@ -68,8 +69,8 @@ export function createUseTemplate({ resolveProvider }: TemplateState): UseTempla
     if (showByDefault)
       show()
 
-    if (hideOnUnmounted)
-      tryOnUnmounted(hide)
+    if (hideOnUnmounted && getCurrentInstance())
+      onUnmounted(hide)
 
     return { show, hide }
   }

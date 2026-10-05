@@ -46,7 +46,6 @@
     "cypress:run": "cypress run --component"
   },
   "peerDependencies": {
-    "@vueuse/core": "^10.7.2",
     "vue": ">=3.0.0",
     "vue-component-type-helpers": ">=2.1.6"
   },
@@ -55,7 +54,6 @@
     "@release-it/conventional-changelog": "^8.0.1",
     "@types/node": "^20.11.17",
     "@vitejs/plugin-vue": "^5.0.4",
-    "@vueuse/core": "^10.7.2",
     "cypress": "^13.6.4",
     "eslint": "npm:eslint-ts-patch@8.56.0-0",
     "eslint-ts-patch": "8.56.0-0",

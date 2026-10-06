@@ -1,4 +1,10 @@
+# Changelog
 
+# [0.3.0](https://github.com/hunterliu1003/vue-use-template/compare/0.2.0...0.3.0) (2026-10-06)
+
+### Features
+
+* installable template states and createInstanceResolver ([7eca249](https://github.com/hunterliu1003/vue-use-template/commit/7eca249fde9630b579327013abba1241fbce91d4))
 
 # [0.2.0](https://github.com/hunterliu1003/vue-use-template/compare/0.1.1...0.2.0) (2026-10-05)
 

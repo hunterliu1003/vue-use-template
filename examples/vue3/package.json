@@ -13,11 +13,11 @@
     "vue-use-template": "0.3.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.5.0",
+    "@vitejs/plugin-vue": "^6.0.9",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
-    "typescript": "^5.3.2",
-    "vite": "^5.0.5"
+    "typescript": "^5.6.3",
+    "vite": "^8.3.2"
   }
 }

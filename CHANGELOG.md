@@ -11,76 +11,76 @@
 
 ### Bug Fixes
 
-* do not call a function passed to isTemplate ([677d64d](https://github.com/hunterliu1003/vue-use-template/commit/677d64d0df0113f072076477ae8b74402139796e))
-* raise the vue peer range to >=3.3.0 ([d588ada](https://github.com/hunterliu1003/vue-use-template/commit/d588ada79a9cc4446f5fe666ceb5e71188dedd16))
+* do not call a function passed to isTemplate ([bde3071](https://github.com/hunterliu1003/vue-use-template/commit/bde3071e8f687c2d173827d81fb94cef95573263))
+* raise the vue peer range to >=3.3.0 ([67616ef](https://github.com/hunterliu1003/vue-use-template/commit/67616ef97aa79e0ab6adf108d167252a2f65fc20))
 
 
 ### Features
 
-* warn in development when show() is ignored on the server ([65c8be4](https://github.com/hunterliu1003/vue-use-template/commit/65c8be4126f5028c97bf3678d5e3d4ed0ec966c9))
+* warn in development when show() is ignored on the server ([b753ca8](https://github.com/hunterliu1003/vue-use-template/commit/b753ca8f2e31639fe50a5442692aee3abb23bc78))
 
 ## [0.1.1](https://github.com/hunterliu1003/vue-use-template/compare/0.1.0...0.1.1) (2026-10-05)
 
 
 ### Bug Fixes
 
-* apply attrs, props and emits given as a getter ([41f99cb](https://github.com/hunterliu1003/vue-use-template/commit/41f99cbda5c60885bc2fdb1b39e9d3163857e0ba))
-* render functional component slots instead of an empty comment ([a91d8b6](https://github.com/hunterliu1003/vue-use-template/commit/a91d8b65ae15cc2fc97316528dd6da672f8c5efc))
+* apply attrs, props and emits given as a getter ([5e4b2a9](https://github.com/hunterliu1003/vue-use-template/commit/5e4b2a9202b90e254af2579c13ae21201bf7fe61))
+* render functional component slots instead of an empty comment ([aa3a509](https://github.com/hunterliu1003/vue-use-template/commit/aa3a509ea8fc7f3a0fcb982d569d3ca9bfec11d3))
 
 # [0.1.0](https://github.com/hunterliu1003/vue-use-template/compare/0.0.6...0.1.0) (2026-10-05)
 
 
 ### Bug Fixes
 
-* keep hideOnUnmounted on by default when only some options are passed ([137e53a](https://github.com/hunterliu1003/vue-use-template/commit/137e53a0fde30b33be77f46bfad78032cdae9fcd))
-* tell server renders apart by SSR context instead of window ([a979e86](https://github.com/hunterliu1003/vue-use-template/commit/a979e864ed25230e93545bc4c7f1d3bb2b175f0d))
+* keep hideOnUnmounted on by default when only some options are passed ([bee8bc1](https://github.com/hunterliu1003/vue-use-template/commit/bee8bc1f355af3f921822087ade30686851120d5))
+* tell server renders apart by SSR context instead of window ([7041751](https://github.com/hunterliu1003/vue-use-template/commit/70417519e6946145891eacc2a361b1f9af4c98cd))
 
 
 ### Features
 
-* isolate templates per SSR render so they never leak across requests ([bbb7e2f](https://github.com/hunterliu1003/vue-use-template/commit/bbb7e2faa3805d3929b10bbc3ed113ea64edc995))
-* render templates shown during setup into the server HTML ([33fbfa3](https://github.com/hunterliu1003/vue-use-template/commit/33fbfa33561a2771d02561fbacec368cd159d048))
+* isolate templates per SSR render so they never leak across requests ([9a21f37](https://github.com/hunterliu1003/vue-use-template/commit/9a21f37615ef5770636d92258e20899ef6527812))
+* render templates shown during setup into the server HTML ([d27eb62](https://github.com/hunterliu1003/vue-use-template/commit/d27eb62662138eb4849fd8cd7ac0f0cae7f881ea))
 
 
 ### Performance Improvements
 
-* let bundlers drop the default provider when only the template helpers are imported ([2b65fb5](https://github.com/hunterliu1003/vue-use-template/commit/2b65fb523922f38439297a6e9a3437de2100849b))
-* stop re-rendering open templates without slots when another one opens ([2d123d6](https://github.com/hunterliu1003/vue-use-template/commit/2d123d6243cd1479ea63bb5fee1cb685ed73cea1))
+* let bundlers drop the default provider when only the template helpers are imported ([4e7452b](https://github.com/hunterliu1003/vue-use-template/commit/4e7452bf4961203d6ecca40895daa86420201bd9))
+* stop re-rendering open templates without slots when another one opens ([014331c](https://github.com/hunterliu1003/vue-use-template/commit/014331ceac5d3afc6238f991b8702626c2ee8985))
 
 ## [0.0.6](https://github.com/hunterliu1003/vue-use-template/compare/0.0.4...0.0.6) (2024-10-22)
 
 
 ### Features
 
-* do not support SSR ([ccf4640](https://github.com/hunterliu1003/vue-use-template/commit/ccf46404be7fd5a3f61830b3156365786d6a052e))
+* do not support SSR ([a1a41cf](https://github.com/hunterliu1003/vue-use-template/commit/a1a41cf07f7c6886519470f12b9d14e742b16f7e))
 
 ## [0.0.4](https://github.com/hunterliu1003/vue-use-template/compare/0.0.3...0.0.4) (2024-10-13)
 
 
 ### Features
 
-* createTemplateProvider ([62a5d9a](https://github.com/hunterliu1003/vue-use-template/commit/62a5d9a7bdf8726a759192264ea8d448b9d2d2d6))
+* createTemplateProvider ([6d58a65](https://github.com/hunterliu1003/vue-use-template/commit/6d58a656af0b925a19b0c3839d1203e000f92b59))
 
 ## [0.0.3](https://github.com/hunterliu1003/vue-use-template/compare/0.0.2...0.0.3) (2024-03-27)
 
 
 ### Features
 
-* Allow to pass a ref, reactive, computed object as a parameter to useTemplate() and add test cases ([f2c20f0](https://github.com/hunterliu1003/vue-use-template/commit/f2c20f009cefc478e9b382bf2024bdd5c0d82d58))
+* Allow to pass a ref, reactive, computed object as a parameter to useTemplate() and add test cases ([4accf74](https://github.com/hunterliu1003/vue-use-template/commit/4accf74ce7775ac4b5ac7e2cbe71267cb80ce116))
 
 ## [0.0.2](https://github.com/hunterliu1003/vue-use-template/compare/0.0.1...0.0.2) (2024-03-26)
 
 
 ### Features
 
-* export mergeTemplateAttrs ([6f54565](https://github.com/hunterliu1003/vue-use-template/commit/6f54565b318fe547655728ae85e9703d9ab87803))
+* export mergeTemplateAttrs ([3089ae6](https://github.com/hunterliu1003/vue-use-template/commit/3089ae6c4c0e7f62a345a5dea2a58fa53b02de19))
 
 ## [0.0.1](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0...0.0.1) (2024-03-26)
 
 
 ### Bug Fixes
 
-* ReferenceError: Cannot access 'vNodeFn' before initialization ([b159e1d](https://github.com/hunterliu1003/vue-use-template/commit/b159e1d728306135fd51f55d44d1649e541f45e8))
+* ReferenceError: Cannot access 'vNodeFn' before initialization ([1fe51d3](https://github.com/hunterliu1003/vue-use-template/commit/1fe51d3fbe316ddd7173c974f40ed070758f5a08))
 
 # [0.0.0](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.11...0.0.0) (2024-03-26)
 
@@ -89,21 +89,21 @@
 
 ### Features
 
-* export useProvider ([826fcdc](https://github.com/hunterliu1003/vue-use-template/commit/826fcdce135c983494751e187b304c7e127fea1d))
+* export useProvider ([3eb90d6](https://github.com/hunterliu1003/vue-use-template/commit/3eb90d6681a640dc3dbb1d0bfc8fb3d3e8523015))
 
 # [0.0.0-beta.10](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.9...0.0.0-beta.10) (2024-03-17)
 
 
 ### Features
 
-* export templateToVNodeFn, isTemplate ([fcca3a9](https://github.com/hunterliu1003/vue-use-template/commit/fcca3a9384c19d3ba90a9c56c46cbba10317f252))
+* export templateToVNodeFn, isTemplate ([7849986](https://github.com/hunterliu1003/vue-use-template/commit/7849986b4ffc0d61a9d94ed2a9dddfdbd22d44ba))
 
 # [0.0.0-beta.9](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.8...0.0.0-beta.9) (2024-03-17)
 
 
 ### Features
 
-* add showByDefault option to useTemplate ([962c168](https://github.com/hunterliu1003/vue-use-template/commit/962c168cfa43a43226bcf6238216b203a61e1de7))
+* add showByDefault option to useTemplate ([6477756](https://github.com/hunterliu1003/vue-use-template/commit/64777563c917a3c84208f2e888008a732bcff410))
 
 # [0.0.0-beta.8](https://github.com/hunterliu1003/vue-use-template/compare/0.0.0-beta.7...0.0.0-beta.8) (2024-03-17)
 

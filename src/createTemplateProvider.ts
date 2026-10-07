@@ -121,7 +121,7 @@ export function createUseTemplateFrom(getState: () => TemplateState): UseTemplat
     if (hideOnUnmounted && getCurrentInstance())
       onUnmounted(hide)
 
-    return { show, hide }
+    return { show, hide, ignored: !provider }
   }
 }
 

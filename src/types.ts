@@ -38,4 +38,6 @@ export type UseTemplate = <T extends Component>(
 ) => {
   show: () => void
   hide: () => void
+  /** `show()` does nothing: `useTemplate()` was called outside a component on the server. */
+  ignored: boolean
 }

@@ -58,6 +58,12 @@ describe('in the browser', () => {
 
     expect(htmlWhenMounted).toContain('<dialog>shown outside a component</dialog>')
   })
+
+  it('reports that show() renders outside any component', () => {
+    const { useTemplate } = createTemplateProvider()
+
+    expect(useTemplate({ component: () => h('dialog') }).ignored).toBe(false)
+  })
 })
 
 describe('useTemplate options', () => {

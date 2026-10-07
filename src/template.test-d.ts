@@ -61,9 +61,9 @@ describe('Template', () => {
 })
 
 describe('useTemplate', () => {
-  it('infers the component through a getter and returns show and hide', () => {
+  it('infers the component through a getter and returns show, hide and ignored', () => {
     expectTypeOf(useTemplate(() => ({ component: Dialog, props: { title: 'Hello' } })))
-      .toEqualTypeOf<{ show: () => void, hide: () => void }>()
+      .toEqualTypeOf<{ show: () => void, hide: () => void, ignored: boolean }>()
     // @ts-expect-error title is a string
     useTemplate(() => ({ component: Dialog, props: { title: 1 } }))
   })

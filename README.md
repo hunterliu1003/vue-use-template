@@ -99,7 +99,7 @@ A component that renders its default slot, then every shown template in the orde
 
 ### `useTemplate(template, options?)`
 
-Returns `{ show, hide }`: `show()` renders `template` in `TemplateProvider` and `hide()` removes it. Calling `show()` while the template is shown does nothing.
+Returns `{ show, hide, ignored }`: `show()` renders `template` in `TemplateProvider` and `hide()` removes it. Calling `show()` while the template is shown does nothing. `ignored` is `true` when `show()` will do nothing because `useTemplate()` was called outside a component on the server (see [SSR](#ssr)), so a caller can skip `show()` and its warning.
 
 `template` is a [`Template`](#template), given as a plain object, a `ref`, a `reactive` object, a `computed` or a getter. A shown template re-renders when reactive state it reads changes. When `template` is a `ref` or a `reactive` object, wrap its component in `markRaw()`; otherwise Vue makes the component reactive and warns.
 

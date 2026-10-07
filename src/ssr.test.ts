@@ -107,4 +107,28 @@ describe('server-side rendering', () => {
     expect(warn).toHaveBeenCalledOnce()
     expect(warn.mock.calls[0][0]).toContain('outside a component on the server')
   })
+
+  it('reports that show() will be ignored outside any component on the server, without a warning', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    onTestFinished(() => warn.mockRestore())
+    const { useTemplate } = createTemplateProvider()
+
+    expect(useTemplate({ component: () => h('dialog') }).ignored).toBe(true)
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  it('reports that show() renders during setup on the server', async () => {
+    const { TemplateProvider, useTemplate } = createTemplateProvider()
+    let ignored: boolean | undefined
+    const Page = defineComponent({
+      setup() {
+        ignored = useTemplate({ component: () => h('dialog') }).ignored
+        return () => h('p', 'page')
+      },
+    })
+
+    await renderRequest(TemplateProvider, Page)
+
+    expect(ignored).toBe(false)
+  })
 })

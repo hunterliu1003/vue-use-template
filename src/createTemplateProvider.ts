@@ -1,7 +1,7 @@
 import type { App, Component, InjectionKey, MaybeRefOrGetter, Ref, VNode } from 'vue'
 import type { Provider, Template, TemplateState, UseTemplate } from './types'
 import { defineComponent, getCurrentInstance, h, hasInjectionContext, inject, onMounted, onUnmounted, ref, shallowReactive, ssrContextKey, warn } from 'vue'
-import { createInstanceResolver, isBrowser, isClient, markServerRender } from './createInstanceResolver'
+import { createInstanceResolver, isBrowser, isClient } from './createInstanceResolver'
 import { templateToVNodeFn } from './utils'
 
 const templateStateKey: InjectionKey<TemplateState> = /* @__PURE__ */ Symbol('vue-use-template')
@@ -38,7 +38,6 @@ export function createTemplateState(): TemplateState {
       if (!ssrContext)
         return (getCurrentInstance() ? isClient : isBrowser()) ? clientProvider : undefined
 
-      markServerRender()
       let provider = serverProviders.get(ssrContext)
       if (!provider) {
         provider = createProvider()

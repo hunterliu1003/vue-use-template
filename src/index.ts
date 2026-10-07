@@ -12,7 +12,7 @@ import {
 
 export type { InstanceResolver } from './createInstanceResolver'
 
-export { createInstanceResolver } from './createInstanceResolver'
+export { createInstanceResolver, isBrowser, markServer } from './createInstanceResolver'
 
 export type {
   Provider,

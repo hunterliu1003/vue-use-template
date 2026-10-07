@@ -3,15 +3,16 @@ import { hasInjectionContext, inject } from 'vue'
 
 export const isClient = typeof window !== 'undefined' && typeof document !== 'undefined'
 
-let renderedOnServer = false
+let markedServer = false
 
-/** Some servers polyfill `window`: once a server render is seen, `isClient` alone can no longer be trusted. */
-export function markServerRender() {
-  renderedOnServer = true
+/** Call once when a server that defines `window` starts, before it renders: nothing else tells such a server from a browser. */
+export function markServer() {
+  markedServer = true
 }
 
+/** Whether code outside a component runs in a browser: `window` exists and markServer() was not called. */
 export function isBrowser() {
-  return isClient && !renderedOnServer
+  return isClient && !markedServer
 }
 
 export interface InstanceResolver<T> {

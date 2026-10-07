@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vue": "^3.5.12",
-    "vue-use-template": "0.3.0"
+    "vue-use-template": "0.3.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.9",

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/hunterliu1003/vue-use-template/compare/0.3.0...0.3.1) (2026-10-07)
+
+### Bug Fixes
+
+* hydrate templates shown outside components without a mismatch ([7998db3](https://github.com/hunterliu1003/vue-use-template/commit/7998db3e86170eb425fdfa5d91917360eaec115d))
+* ignore show() outside components on servers that polyfill window ([00ef56e](https://github.com/hunterliu1003/vue-use-template/commit/00ef56e9eb00959a82670e1dfb579b54751533be))
+
 # [0.3.0](https://github.com/hunterliu1003/vue-use-template/compare/0.2.0...0.3.0) (2026-10-06)
 
 ### Features

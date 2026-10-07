@@ -188,6 +188,11 @@ useTemplate({
 
 Templates shown while components set up (`showByDefault: true`, or `show()` called synchronously in `setup`) are rendered into the server HTML and hydrated on the client without mismatches. Every server render keeps its own templates, so nothing leaks between requests.
 
-Templates shown after an `await` in an async `setup`, or by a component that renders after `<TemplateProvider>` (instead of inside or around it), are rendered on the client only.
+`<TemplateProvider>` renders its templates after its default slot, and on the server it does not wait for an `await` in that slot. These templates are rendered on the client only, after hydration:
 
-On the server, `show()` from a `useTemplate()` called outside a component (for example after an `await`, in a server plugin or in a store) is ignored and, outside production, logs a warning. Concurrent requests share every module-level variable, so guessing the request could render one user's template into another user's page.
+- templates shown after an `await` in the async `setup` of a component inside `<TemplateProvider>`
+- templates shown by a component that renders after `<TemplateProvider>` (instead of inside or around it)
+
+A component around `<TemplateProvider>`, such as the root component or a layout, renders it only after its own `setup` finishes, so it can show a template after an `await` and still have it rendered on the server. It has to call `useTemplate()` before the `await`, or use `<script setup>`, where Vue restores the current component after each top-level `await`. When a hand-written `async setup()` calls `useTemplate()` after an `await`, the server ignores the template while the client renders it during hydration, so Vue reports a hydration mismatch.
+
+On the server, `show()` from a `useTemplate()` called outside a component (for example after an `await` in a hand-written `async setup()`, in a server plugin or in a store) is ignored and, outside production, logs a warning. On a server that defines `window`, this applies from its first render on. Concurrent requests share every module-level variable, so guessing the request could render one user's template into another user's page.

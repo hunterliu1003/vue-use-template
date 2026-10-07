@@ -1,5 +1,16 @@
 # Changelog
 
+# [0.4.0](https://github.com/hunterliu1003/vue-use-template/compare/0.3.3...0.4.0) (2026-10-07)
+
+### Bug Fixes
+
+* tell an outlet mounted again apart from hydration ([5b8e72c](https://github.com/hunterliu1003/vue-use-template/commit/5b8e72c9d943ca4218468cda1eb7fb80b3b5b481))
+
+### Features
+
+* let a server that defines window say so with markServer() ([e63b041](https://github.com/hunterliu1003/vue-use-template/commit/e63b041cd04d6d35abe9c0a81e99311b8b033e9f))
+* report from useTemplate() whether show() will be ignored ([c1e591c](https://github.com/hunterliu1003/vue-use-template/commit/c1e591cdc6bbb00a98b1ba7611e0a7a8a490d570))
+
 ## [0.3.3](https://github.com/hunterliu1003/vue-use-template/compare/0.3.2...0.3.3) (2026-10-07)
 
 ### Bug Fixes

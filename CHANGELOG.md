@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.3](https://github.com/hunterliu1003/vue-use-template/compare/0.3.2...0.3.3) (2026-10-07)
+
+### Bug Fixes
+
+* ignore show() in app.runWithContext() on servers that polyfill window ([b16a55c](https://github.com/hunterliu1003/vue-use-template/commit/b16a55cda88c075b00accf2a601d43a99c5746c3))
+
 ## [0.3.2](https://github.com/hunterliu1003/vue-use-template/compare/0.3.1...0.3.2) (2026-10-07)
 
 ### Bug Fixes

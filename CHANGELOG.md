@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.2](https://github.com/hunterliu1003/vue-use-template/compare/0.3.1...0.3.2) (2026-10-07)
+
+### Bug Fixes
+
+* hold back only templates the server ignored while hydrating ([89a84bc](https://github.com/hunterliu1003/vue-use-template/commit/89a84bc5b4789e36cd66ab35135fc2eddab1feb6))
+
 ## [0.3.1](https://github.com/hunterliu1003/vue-use-template/compare/0.3.0...0.3.1) (2026-10-07)
 
 ### Bug Fixes

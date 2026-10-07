@@ -1,7 +1,7 @@
 import type { App, Component, InjectionKey, MaybeRefOrGetter } from 'vue'
 import type { Provider, Template, TemplateState, UseTemplate } from './types'
 import { defineComponent, getCurrentInstance, h, hasInjectionContext, inject, onUnmounted, shallowReactive, ssrContextKey, warn } from 'vue'
-import { createInstanceResolver, isClient, markServerRender } from './createInstanceResolver'
+import { createInstanceResolver, isBrowser, isClient, markServerRender } from './createInstanceResolver'
 import { templateToVNodeFn } from './utils'
 
 const templateStateKey: InjectionKey<TemplateState> = /* @__PURE__ */ Symbol('vue-use-template')
@@ -17,10 +17,6 @@ export function createProvider(): Provider {
   }
 }
 
-function resolveSsrContext(): object | null {
-  return hasInjectionContext() ? inject(ssrContextKey, null) : null
-}
-
 export function createTemplateState(): TemplateState {
   const clientProvider = createProvider()
   /** Keyed by SSR context rather than app: every render gets a fresh context, even when an app is reused across requests. */
@@ -32,8 +28,11 @@ export function createTemplateState(): TemplateState {
       stateResolver.setActive(state)
     },
     resolveProvider() {
+      if (!hasInjectionContext())
+        return isBrowser() ? clientProvider : undefined
+
       /** The SSR context, not `window`, tells a server render apart: some servers polyfill `window`. */
-      const ssrContext = resolveSsrContext()
+      const ssrContext = inject(ssrContextKey, null)
       if (!ssrContext)
         return isClient ? clientProvider : undefined
 

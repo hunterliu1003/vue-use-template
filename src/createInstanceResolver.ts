@@ -10,6 +10,10 @@ export function markServerRender() {
   renderedOnServer = true
 }
 
+export function isBrowser() {
+  return isClient && !renderedOnServer
+}
+
 export interface InstanceResolver<T> {
   resolve: (explicit?: T) => T | undefined
   setActive: (instance: T | undefined) => void
@@ -30,7 +34,7 @@ export function createInstanceResolver<T>(key: InjectionKey<T>): InstanceResolve
       }
 
       /** The active instance is shared by every concurrent request: on the server it would hand one request's instance to another. */
-      return isClient && !renderedOnServer ? active : undefined
+      return isBrowser() ? active : undefined
     },
     setActive(instance) {
       active = instance

@@ -47,6 +47,7 @@
     "test:unit": "vitest run",
     "cypress:open": "cypress open --browser electron --component",
     "cypress:run": "cypress run --component",
+    "test:nuxt": "tsdown && pnpm --filter ./examples/nuxt build && node scripts/test-nuxt.mjs",
     "prepare": "simple-git-hooks"
   },
   "peerDependencies": {

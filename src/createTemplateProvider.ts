@@ -17,8 +17,12 @@ export function createProvider(): Provider {
   }
 }
 
+/** The browser-only providers of createTemplateState(): on the server, a template shown outside a component has no provider. */
+const clientProviders = /* @__PURE__ */ new WeakSet<Provider>()
+
 export function createTemplateState(): TemplateState {
   const clientProvider = createProvider()
+  clientProviders.add(clientProvider)
   /** Keyed by SSR context rather than app: every render gets a fresh context, even when an app is reused across requests. */
   const serverProviders = new WeakMap<object, Provider>()
 
@@ -48,8 +52,8 @@ export function createTemplateState(): TemplateState {
   return state
 }
 
-/** The server ignores templates shown outside a component, so outlets leave them out while hydrating and render them once mounted. */
-const shownOutsideComponents = /* @__PURE__ */ new WeakSet<() => VNode>()
+/** Outlets leave these out while hydrating, to match the server HTML, and render them once mounted. */
+const ignoredOnServer = /* @__PURE__ */ new WeakSet<() => VNode>()
 
 function useHydrating(): Ref<boolean> {
   const hydrating = ref(Boolean(getCurrentInstance()?.vnode.el))
@@ -63,7 +67,7 @@ function useHydrating(): Ref<boolean> {
 
 function renderTemplates(provider: Provider | undefined, hydrating: Ref<boolean>) {
   const vNodeFns = [...(provider?.vNodeFns ?? [])]
-  const rendered = hydrating.value ? vNodeFns.filter(vNodeFn => !shownOutsideComponents.has(vNodeFn)) : vNodeFns
+  const rendered = hydrating.value ? vNodeFns.filter(vNodeFn => !ignoredOnServer.has(vNodeFn)) : vNodeFns
   return rendered.map(vNodeFn => vNodeFn())
 }
 
@@ -99,8 +103,8 @@ export function createUseTemplateFrom(getState: () => TemplateState): UseTemplat
   ): ReturnType<UseTemplate> => {
     const provider = getState().resolveProvider()
     const vNodeFn = templateToVNodeFn(template)
-    if (!getCurrentInstance())
-      shownOutsideComponents.add(vNodeFn)
+    if (!getCurrentInstance() && provider && clientProviders.has(provider))
+      ignoredOnServer.add(vNodeFn)
 
     function show() {
       if (provider)

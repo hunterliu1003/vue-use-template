@@ -61,6 +61,32 @@ describe('hydration', () => {
     expect(container.innerHTML).toContain('<dialog>shown outside a component</dialog>')
   })
 
+  it('hydrates a template shown outside any component through a state that renders it on the server too', async () => {
+    const render = async () => {
+      const { createProvider, createTemplateOutlet, createUseTemplate } = await importFresh()
+      const provider = createProvider()
+      const state = { install() {}, resolveProvider: () => provider }
+      const Outlet = createTemplateOutlet(state)
+      createUseTemplate(state)({ component: () => h('dialog', 'shown by a library') }).show()
+      return createSSRApp({ render: () => h('main', [h('p', 'page'), h(Outlet)]) })
+    }
+    const html = await renderToString(await render())
+    const app = await render()
+    const container = document.createElement('div')
+    container.innerHTML = html
+    const warn = vi.spyOn(console, 'warn')
+    const error = vi.spyOn(console, 'error')
+
+    app.mount(container)
+    const hydrated = container.innerHTML
+    await nextTick()
+
+    expect(html).toContain('<dialog>shown by a library</dialog>')
+    expect(hydrated).toBe(html)
+    expect([...warn.mock.calls, ...error.mock.calls].flat().join('\n')).not.toMatch(/hydration/i)
+    expect(container.querySelectorAll('dialog')).toHaveLength(1)
+  })
+
   it('hydrates a server-rendered async component template without mismatches', async () => {
     const AsyncDialog = () => defineAsyncComponent(async () => () => h('dialog', 'async dialog'))
     const html = await renderToString(createApp(AsyncDialog()))

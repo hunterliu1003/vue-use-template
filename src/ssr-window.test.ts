@@ -46,4 +46,21 @@ describe('server-side rendering with window defined', () => {
     expect(warn).toHaveBeenCalledOnce()
     expect(warn.mock.calls[0][0]).toContain('outside a component on the server')
   })
+
+  it('ignores show() from a useTemplate() called in app.runWithContext() before a render, with a warning', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    onTestFinished(() => warn.mockRestore())
+    const { TemplateProvider, useTemplate } = createTemplateProvider()
+    const request = () => createSSRApp({
+      render: () => h(TemplateProvider, null, { default: () => h('p', 'page') }),
+    })
+    await renderToString(request())
+    const app = request()
+
+    app.runWithContext(() => useTemplate({ component: () => h('dialog', 'shown in a plugin') }).show())
+    await renderToString(app)
+
+    expect(warn).toHaveBeenCalledOnce()
+    expect(warn.mock.calls[0][0]).toContain('outside a component on the server')
+  })
 })

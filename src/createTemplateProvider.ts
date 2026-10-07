@@ -32,13 +32,11 @@ export function createTemplateState(): TemplateState {
       stateResolver.setActive(state)
     },
     resolveProvider() {
-      if (!hasInjectionContext())
-        return isBrowser() ? clientProvider : undefined
-
       /** The SSR context, not `window`, tells a server render apart: some servers polyfill `window`. */
-      const ssrContext = inject(ssrContextKey, null)
+      const ssrContext = hasInjectionContext() ? inject(ssrContextKey, null) : null
+      /** Outside a component, `window` alone cannot tell a browser from a server that polyfills it. */
       if (!ssrContext)
-        return isClient ? clientProvider : undefined
+        return (getCurrentInstance() ? isClient : isBrowser()) ? clientProvider : undefined
 
       markServerRender()
       let provider = serverProviders.get(ssrContext)

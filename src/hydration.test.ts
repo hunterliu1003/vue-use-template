@@ -18,6 +18,12 @@ function createApp(template: Component = () => h('dialog', 'shown in setup')) {
   })
 }
 
+/** One module per side, like the separate server and browser processes: after a server render, useTemplate() outside a component counts as running on the server. */
+async function importFresh() {
+  vi.resetModules()
+  return import('./createTemplateProvider')
+}
+
 describe('hydration', () => {
   it('hydrates a server-rendered template without mismatches', async () => {
     const html = await renderToString(createApp())
@@ -32,6 +38,27 @@ describe('hydration', () => {
     expect(html).toContain('<dialog>shown in setup</dialog>')
     expect([...warn.mock.calls, ...error.mock.calls].flat().join('\n')).not.toMatch(/hydration/i)
     expect(container.innerHTML).toBe(html)
+  })
+
+  it('keeps a template shown outside any component out of hydration, then renders it', async () => {
+    const page = (TemplateProvider: Component) => createSSRApp({
+      render: () => h(TemplateProvider, null, { default: () => h('p', 'page') }),
+    })
+    const html = await renderToString(page((await importFresh()).createTemplateProvider().TemplateProvider))
+    const { TemplateProvider, useTemplate } = (await importFresh()).createTemplateProvider()
+    useTemplate({ component: () => h('dialog', 'shown outside a component') }).show()
+    const container = document.createElement('div')
+    container.innerHTML = html
+    const warn = vi.spyOn(console, 'warn')
+    const error = vi.spyOn(console, 'error')
+
+    page(TemplateProvider).mount(container)
+    const hydrated = container.innerHTML
+    await nextTick()
+
+    expect(hydrated).toBe(html)
+    expect([...warn.mock.calls, ...error.mock.calls].flat().join('\n')).not.toMatch(/hydration/i)
+    expect(container.innerHTML).toContain('<dialog>shown outside a component</dialog>')
   })
 
   it('hydrates a server-rendered async component template without mismatches', async () => {

@@ -23,6 +23,16 @@ describe('in the browser', () => {
 
     expect(error).toBeUndefined()
   })
+
+  it('renders a template shown outside any component in the first render of a client-side app', () => {
+    const { TemplateProvider, useTemplate } = createTemplateProvider()
+    useTemplate({ component: () => h('dialog', 'shown outside a component') }).show()
+    const el = document.createElement('div')
+
+    createApp({ render: () => h(TemplateProvider) }).mount(el)
+
+    expect(el.innerHTML).toContain('<dialog>shown outside a component</dialog>')
+  })
 })
 
 describe('useTemplate options', () => {

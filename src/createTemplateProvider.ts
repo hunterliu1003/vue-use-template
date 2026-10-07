@@ -1,6 +1,6 @@
-import type { App, Component, InjectionKey, MaybeRefOrGetter } from 'vue'
+import type { App, Component, InjectionKey, MaybeRefOrGetter, Ref, VNode } from 'vue'
 import type { Provider, Template, TemplateState, UseTemplate } from './types'
-import { defineComponent, getCurrentInstance, h, hasInjectionContext, inject, onUnmounted, shallowReactive, ssrContextKey, warn } from 'vue'
+import { defineComponent, getCurrentInstance, h, hasInjectionContext, inject, onMounted, onUnmounted, ref, shallowReactive, ssrContextKey, warn } from 'vue'
 import { createInstanceResolver, isBrowser, isClient, markServerRender } from './createInstanceResolver'
 import { templateToVNodeFn } from './utils'
 
@@ -48,8 +48,23 @@ export function createTemplateState(): TemplateState {
   return state
 }
 
-function renderTemplates(provider: Provider | undefined) {
-  return [...(provider?.vNodeFns ?? [])].map(vNodeFn => vNodeFn())
+/** The server ignores templates shown outside a component, so outlets leave them out while hydrating and render them once mounted. */
+const shownOutsideComponents = /* @__PURE__ */ new WeakSet<() => VNode>()
+
+function useHydrating(): Ref<boolean> {
+  const hydrating = ref(Boolean(getCurrentInstance()?.vnode.el))
+  if (hydrating.value) {
+    onMounted(() => {
+      hydrating.value = false
+    })
+  }
+  return hydrating
+}
+
+function renderTemplates(provider: Provider | undefined, hydrating: Ref<boolean>) {
+  const vNodeFns = [...(provider?.vNodeFns ?? [])]
+  const rendered = hydrating.value ? vNodeFns.filter(vNodeFn => !shownOutsideComponents.has(vNodeFn)) : vNodeFns
+  return rendered.map(vNodeFn => vNodeFn())
 }
 
 export function createTemplateProviderComponent(getState: () => TemplateState) {
@@ -57,8 +72,9 @@ export function createTemplateProviderComponent(getState: () => TemplateState) {
     name: 'TemplateProvider',
     setup(_props, { slots }) {
       const provider = getState().resolveProvider()
+      const hydrating = useHydrating()
       /** A separate component rendered after the slot, so templates shown while the slot sets up are already registered on the server and while hydrating. */
-      const TemplateOutlet = () => renderTemplates(provider)
+      const TemplateOutlet = () => renderTemplates(provider, hydrating)
       return () => [slots.default?.(), h(TemplateOutlet)]
     },
   })
@@ -70,7 +86,8 @@ export function createTemplateOutlet(state: TemplateState) {
     name: 'TemplateOutlet',
     setup() {
       const provider = state.resolveProvider()
-      return () => renderTemplates(provider)
+      const hydrating = useHydrating()
+      return () => renderTemplates(provider, hydrating)
     },
   })
 }
@@ -82,6 +99,8 @@ export function createUseTemplateFrom(getState: () => TemplateState): UseTemplat
   ): ReturnType<UseTemplate> => {
     const provider = getState().resolveProvider()
     const vNodeFn = templateToVNodeFn(template)
+    if (!getCurrentInstance())
+      shownOutsideComponents.add(vNodeFn)
 
     function show() {
       if (provider)

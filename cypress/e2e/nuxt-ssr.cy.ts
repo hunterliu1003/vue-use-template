@@ -41,21 +41,21 @@ describe('vue-use-template in Nuxt SSR', () => {
     cy.get('@consoleError').should('not.have.been.calledWith', mismatch)
   })
 
+  it('renders a template shown in route middleware on the client only, after hydration', () => {
+    serverHtml('/ssr/middleware').should('not.contain', 'Shown in route middleware')
+    hydrate('/ssr/middleware')
+    cy.contains('dialog', 'Shown in route middleware')
+    cy.get('@consoleError').should('not.have.been.calledWith', mismatch)
+  })
+
+  it('renders a template shown in a plugin on the client only, after hydration', () => {
+    serverHtml('/ssr/plugin').should('not.contain', 'Shown in a plugin')
+    hydrate('/ssr/plugin')
+    cy.contains('dialog', 'Shown in a plugin')
+    cy.get('@consoleError').should('not.have.been.calledWith', mismatch)
+  })
+
   describe('known hydration mismatches', () => {
-    it('leaves a template shown in route middleware out of the server HTML but not out of hydration', () => {
-      serverHtml('/ssr/middleware').should('not.contain', 'Shown in route middleware')
-      hydrate('/ssr/middleware')
-      cy.contains('dialog', 'Shown in route middleware')
-      cy.get('@consoleError').should('have.been.calledWith', mismatch)
-    })
-
-    it('leaves a template shown in a plugin out of the server HTML but not out of hydration', () => {
-      serverHtml('/ssr/plugin').should('not.contain', 'Shown in a plugin')
-      hydrate('/ssr/plugin')
-      cy.contains('dialog', 'Shown in a plugin')
-      cy.get('@consoleError').should('have.been.calledWith', mismatch)
-    })
-
     it('renders a template shown in a lazy component into the server HTML once loaded, before the client has loaded it', () => {
       cy.request('/ssr/lazy')
       serverHtml('/ssr/lazy').should('contain', 'Shown in a lazy component')

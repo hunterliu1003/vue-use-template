@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import type { Component } from 'vue'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { createSSRApp, defineAsyncComponent, defineComponent, h, nextTick } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 import { createTemplateProvider } from './createTemplateProvider'
@@ -47,7 +47,8 @@ describe('hydration', () => {
     const html = await renderToString(page((await importFresh()).createTemplateProvider().TemplateProvider))
     const { TemplateProvider, useTemplate } = (await importFresh()).createTemplateProvider()
     useTemplate({ component: () => h('dialog', 'shown outside a component') }).show()
-    const container = document.createElement('div')
+    const container = document.body.appendChild(document.createElement('div'))
+    onTestFinished(() => container.remove())
     container.innerHTML = html
     const warn = vi.spyOn(console, 'warn')
     const error = vi.spyOn(console, 'error')

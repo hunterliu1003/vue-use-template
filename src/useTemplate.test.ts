@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { describe, expect, it, vi } from 'vitest'
-import { createApp, defineComponent, h, nextTick, ref } from 'vue'
+import { createApp, defineComponent, h, nextTick, onMounted, ref } from 'vue'
 import { createTemplateProvider } from './createTemplateProvider'
 
 describe('in the browser', () => {
@@ -32,6 +32,31 @@ describe('in the browser', () => {
     createApp({ render: () => h(TemplateProvider) }).mount(el)
 
     expect(el.innerHTML).toContain('<dialog>shown outside a component</dialog>')
+  })
+
+  it('renders a template shown outside any component as soon as an outlet mounts again from a reused vnode', async () => {
+    const { TemplateProvider, useTemplate } = createTemplateProvider()
+    useTemplate({ component: () => h('dialog', 'shown outside a component') }).show()
+    const el = document.createElement('div')
+    let htmlWhenMounted = ''
+    const Probe = defineComponent({
+      setup() {
+        onMounted(() => {
+          htmlWhenMounted = el.innerHTML
+        })
+        return () => null
+      },
+    })
+    const provider = h(TemplateProvider)
+    const visible = ref(true)
+    createApp({ render: () => (visible.value ? [provider, h(Probe)] : null) }).mount(el)
+    visible.value = false
+    await nextTick()
+
+    visible.value = true
+    await nextTick()
+
+    expect(htmlWhenMounted).toContain('<dialog>shown outside a component</dialog>')
   })
 })
 

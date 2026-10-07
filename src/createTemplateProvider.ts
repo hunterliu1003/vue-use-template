@@ -54,7 +54,8 @@ export function createTemplateState(): TemplateState {
 const ignoredOnServer = /* @__PURE__ */ new WeakSet<() => VNode>()
 
 function useHydrating(): Ref<boolean> {
-  const hydrating = ref(Boolean(getCurrentInstance()?.vnode.el))
+  /** A vnode mounted again keeps the detached element of its previous mount. */
+  const hydrating = ref(Boolean(getCurrentInstance()?.vnode.el?.isConnected))
   if (hydrating.value) {
     onMounted(() => {
       hydrating.value = false

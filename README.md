@@ -1,5 +1,8 @@
 # vue-use-template
 
+> [!IMPORTANT]
+> `vue-use-template` now lives in the [vue-final-modal monorepo](https://github.com/vue-final/vue-final-modal/tree/v5/packages/vue-use-template). Please open [issues](https://github.com/vue-final/vue-final-modal/issues) and pull requests there. This repository is no longer updated.
+
 ## Playground
 
 - [Stackblitz for Vue 3](https://stackblitz.com/github/hunterliu1003/vue-use-template/tree/master/examples/vue3)
